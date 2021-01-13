@@ -44,6 +44,8 @@ def includeDesktopSupport = true
 // Also defines JUnit 4.
 dependencies {
     implementation wpi.deps.wpilib()
+    implementation 'junit:junit:4.12'
+    implementation 'junit:junit:4.12'
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
