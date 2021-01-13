@@ -1,5 +1,7 @@
 package frc.robot;
 
-public class SubsystemManager {
+import frc.robot.subsystem.Drive;
 
+public class SubsystemManager {
+    public Drive drive;
 }
