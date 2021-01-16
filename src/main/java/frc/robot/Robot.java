@@ -10,10 +10,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
-  
+  private Drive drive;
+  private Intake intake;
+
+  public Robot() {
+    drive = new DriveImpl();
+    drive.setAllMotors(100);
+  } 
+
   @Override
   public void robotInit() {}
 
