@@ -1,22 +1,22 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilij.Talon;
+import edu.wpi.first.wpilij.PWNVictorSPX;
 
 public class DriveImpl extends Subsystem implements Drive {
-  public Talon motorRightFront;
-  public Talon motorLeftFront;
-  public Talon motorRightBack;
-  public Talon motorLeftBack;
+  public PWNVictorSPX motorRightFront;
+  public PWNVictorSPX motorLeftFront;
+  public PWNVictorSPX motorRightBack;
+  public PWNVictorSPX motorLeftBack;
 
   public DriveImpl(
-    Talon motorRightFront, Talon motorLeftFront, 
-    Talon motorRightBack, Talon motorLeftBack
+    PWNVictorSPX motorRightFront, PWNVictorSPX motorLeftFront, 
+    PWNVictorSPX motorRightBack, PWNVictorSPX motorLeftBack
     ) {
-      this.motorRightFront = motorRightFront
-      this.motorLeftFront = motorLeftFront
-      this.motorRightBack = motorRightBack
-      this.motorLeftBack = motorLeftBack
+      this.motorRightFront = motorRightFront;
+      this.motorLeftFront = motorLeftFront;
+      this.motorRightBack = motorRightBack;
+      this.motorLeftBack = motorLeftBack;
   }
 
 @Override
@@ -32,8 +32,8 @@ public void initDefaultCommand() {
     motorLeftBack.set(value);
       }
 
-@OOverride
-public void setEachMotor(double rf, double lf, double rb, double lb)
+@Override
+public void setEachMotor(double rf, double lf, double rb, double lb) {
 motorRightFront.set(rf);
 motorLeftFront.set(lf);
 motorRightBack.set(rb);
