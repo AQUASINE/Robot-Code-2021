@@ -1,17 +1,17 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 
 public class DriveImpl extends Subsystem implements Drive {
-  public Talon motorRightFront;
-  public Talon motorLeftFront;
-  public Talon motorRightBack;
-  public Talon motorLeftBack;
+  public PWMVictorSPX motorRightFront;
+  public PWMVictorSPX motorLeftFront;
+  public PWMVictorSPX motorRightBack;
+  public PWMVictorSPX motorLeftBack;
 
   public DriveImpl(
-    Talon motorRightFront, Talon motorLeftFront, 
-    Talon motorRightBack, Talon motorLeftBack
+    PWMVictorSPX motorRightFront, PWMVictorSPX motorLeftFront, 
+    PWMVictorSPX motorRightBack, PWMVictorSPX motorLeftBack
     ) {
       this.motorRightFront = motorRightFront;
       this.motorLeftFront = motorLeftFront;

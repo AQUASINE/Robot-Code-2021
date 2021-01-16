@@ -10,27 +10,27 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
   private Drive drive;
 
-  public Talon motorRightFront;
-  public Talon motorLeftFront;
-  public Talon motorRightBack;
-  public Talon motorLeftBack;
+  public PWMVictorSPX motorRightFront;
+  public PWMVictorSPX motorLeftFront;
+  public PWMVictorSPX motorRightBack;
+  public PWMVictorSPX motorLeftBack;
 
   public Joystick joystick;
 
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
-    motorRightFront = new Talon(0);
-    motorLeftFront = new Talon(1);
-    motorRightBack = new Talon(2);
-    motorLeftBack = new Talon(3);
+    motorRightFront = new PWMVictorSPX(0);
+    motorLeftFront = new PWMVictorSPX(1);
+    motorRightBack = new PWMVictorSPX(2);
+    motorLeftBack = new PWMVictorSPX(3);
 
     drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
   } 
