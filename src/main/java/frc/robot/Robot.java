@@ -10,15 +10,29 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
   private Drive drive;
-  private Intake intake;
+
+  public Talon motorRightFront;
+  public Talon motorLeftFront;
+  public Talon motorRightBack;
+  public Talon motorLeftBack;
+
+  public Joystick joystick;
 
   public Robot() {
-    drive = new DriveImpl();
-    drive.setAllMotors(100);
+    joystick = new Joystick(0);
+    // TODO: refactor port numbers into variables
+    motorRightFront = new Talon(0);
+    motorLeftFront = new Talon(1);
+    motorRightBack = new Talon(2);
+    motorLeftBack = new Talon(3);
+
+    drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
   } 
 
   @Override
@@ -26,7 +40,9 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    System.out.println(joystick.getRawAxis(0));
+  }
 
 
   @Override
