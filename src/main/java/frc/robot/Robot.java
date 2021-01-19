@@ -10,16 +10,40 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
+import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
+  private Drive drive;
+
+  public PWMVictorSPX motorRightFront;
+  public PWMVictorSPX motorLeftFront;
+  public PWMVictorSPX motorRightBack;
+  public PWMVictorSPX motorLeftBack;
+
+  public Joystick joystick;
+
+
+  public Robot(){
+    joystick = new Joystick(0);
+
+    motorRightFront = new PWMVictorSPX(0);
+    motorLeftFront = new PWMVictorSPX(1);
+    motorRightBack = new PWMVictorSPX(2);
+    motorLeftBack = new PWMVictorSPX(3);
+
+    drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
+  }
   
   @Override
   public void robotInit() {}
 
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    System.out.println(joystick.getRawAxis(0));
+  }
 
 
   @Override
