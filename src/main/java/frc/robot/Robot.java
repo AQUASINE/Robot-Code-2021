@@ -7,32 +7,45 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
+
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
-  private Drive drive;
+  private DriveImpl drive;
 
-  public PWMVictorSPX motorRightFront;
-  public PWMVictorSPX motorLeftFront;
-  public PWMVictorSPX motorRightBack;
-  public PWMVictorSPX motorLeftBack;
+  public WPI_VictorSPX motorRightFront;
+  public WPI_VictorSPX motorLeftFront;
+  public WPI_VictorSPX motorRightBack;
+  public WPI_VictorSPX motorLeftBack;
 
   public Joystick joystick;
 
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
-    motorRightFront = new PWMVictorSPX(0);
-    motorLeftFront = new PWMVictorSPX(1);
-    motorRightBack = new PWMVictorSPX(2);
-    motorLeftBack = new PWMVictorSPX(3);
+
+    System.out.println("Robot.Robot(): initializing motorRightFront");
+    motorRightFront = new WPI_VictorSPX(1);
+
+    System.out.println("Robot.Robot(): initializing motorLeftFront");
+    motorLeftFront = new WPI_VictorSPX(2);
+
+    System.out.println("Robot.Robot(): initializing motorRightBack");
+    motorRightBack = new WPI_VictorSPX(3);
+
+    System.out.println("Robot.Robot(): initializing motorLeftBack");
+    motorLeftBack = new WPI_VictorSPX(4);
+
+    System.out.println("Robot.Robot(): initialized all motors");
 
     drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
+
+
   } 
 
   @Override
@@ -41,7 +54,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    System.out.println(joystick.getRawAxis(0));
+    drive.setAllMotors(joystick.getRawAxis(0));
+    System.out.println(drive.motorLeftFront.get());
   }
 
 
