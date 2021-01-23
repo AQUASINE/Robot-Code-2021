@@ -1,17 +1,16 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
 
 public class DriveImpl extends Subsystem implements Drive {
-  public PWMVictorSPX motorRightFront;
-  public PWMVictorSPX motorLeftFront;
-  public PWMVictorSPX motorRightBack;
-  public PWMVictorSPX motorLeftBack;
+  public WPI_VictorSPX motorRightFront;
+  public WPI_VictorSPX motorLeftFront;
+  public WPI_VictorSPX motorRightBack;
+  public WPI_VictorSPX motorLeftBack;
 
   public DriveImpl(
-    PWMVictorSPX motorRightFront, PWMVictorSPX motorLeftFront, 
-    PWMVictorSPX motorRightBack, PWMVictorSPX motorLeftBack
+    WPI_VictorSPX motorRightFront, WPI_VictorSPX motorLeftFront, 
+    WPI_VictorSPX motorRightBack, WPI_VictorSPX motorLeftBack
     ) {
       this.motorRightFront = motorRightFront;
       this.motorLeftFront = motorLeftFront;

@@ -56,6 +56,11 @@ dependencies {
 
     implementation 'org.mockito:mockito-core:3.7.0'
 
+    // https://github.com/CrossTheRoadElec/Phoenix-Releases/releases <-- Phoenix Framework is what contains
+    // all the libraries for the Victors
+
+    // You need to download this for it to work
+
     testImplementation 'junit:junit:4.12'
 
     // Enable simulation gui support. Must check the box in vscode to enable support
