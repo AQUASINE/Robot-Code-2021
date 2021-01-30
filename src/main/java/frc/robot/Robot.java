@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -16,11 +17,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.command.auto.AutoPath1Command;
 import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
   private DriveImpl drive;
+  public PowerDistributionPanel pdp;
 
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
@@ -32,6 +35,8 @@ public class Robot extends TimedRobot {
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
+    pdp = new PowerDistributionPanel();
+    pdp.clearStickyFaults();
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -64,7 +69,10 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    Scheduler.getInstance().removeAll();
+    Scheduler.getInstance().add(new AutoPath1Command(drive));
+  }
 
 
   @Override
