@@ -37,10 +37,10 @@ public class Robot extends TimedRobot {
     motorRightFront = new WPI_TalonFX(0);
 
     System.out.println("Robot.Robot(): initializing motorLeftFront");
-    motorLeftFront = new WPI_TalonFX(1);
+    motorRightBack = new WPI_TalonFX(1);
 
     System.out.println("Robot.Robot(): initializing motorRightBack");
-    motorRightBack = new WPI_TalonFX(2);
+    motorLeftFront = new WPI_TalonFX(2);
 
     System.out.println("Robot.Robot(): initializing motorLeftBack");
     motorLeftBack = new WPI_TalonFX(3);
