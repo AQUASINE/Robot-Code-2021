@@ -23,8 +23,8 @@ public class TeleopDriveCommand extends Command {
     @Override
     protected void execute() {
         double x, y, z;
-        x = joystick.getX();
-        y = joystick.getY();
+        x = joystick.getX() * .5;
+        y = joystick.getY() * .5;
         z = joystick.getZ();
 
         drive.differentialDrive.arcadeDrive(y, x);
