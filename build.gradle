@@ -37,6 +37,12 @@ deploy {
     }
 }
 
+repositories {
+    maven {
+        url "http://maven.highcurrent.io/vendordeps/ADIS16448.json"
+    }
+}
+
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 

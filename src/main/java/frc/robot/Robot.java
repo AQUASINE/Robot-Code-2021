@@ -51,7 +51,9 @@ public class Robot extends TimedRobot {
   } 
 
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    drive.m_left.setInverted(true);
+  }
 
 
   @Override
