@@ -40,10 +40,11 @@ public class DriveImpl extends Subsystem implements Drive {
 
   @Override
   public void setAllMotors(double value) {
-    motorRightFront.set(value);
-    motorLeftFront.set(value);
+    motorRightFront.set(-value);
     motorRightBack.set(-value);
-    motorLeftBack.set(-value);
+    motorLeftFront.set(value);
+    motorLeftBack.set(value);
+
   }
 
   @Override
