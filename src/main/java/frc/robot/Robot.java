@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    drive.setAllMotors(joystick.getRawAxis(1)*.2);
+    drive.setAllMotors(joystick.getRawAxis(1));
   }
 
 
