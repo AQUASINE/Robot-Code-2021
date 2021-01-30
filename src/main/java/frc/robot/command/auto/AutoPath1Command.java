@@ -7,6 +7,9 @@ public class AutoPath1Command extends Command {
     private DriveImpl drive;
     private double startingPosition = 0;
     private int loopCount;
+    private double relativePosition;
+    private double targetPosition;
+    private final double k_p = 0.4;
 
     public AutoPath1Command(DriveImpl drive) {
         this.drive = drive;
@@ -16,18 +19,20 @@ public class AutoPath1Command extends Command {
     @Override
     protected void initialize() {
         startingPosition = drive.motorLeftBack.getSelectedSensorPosition();
+        targetPosition = 4 * 2048 * 10.71;
     }
 
     @Override
     protected void execute() {
-        drive.m_left.set(-0.5);
-        drive.m_right.set(-0.5);
+        relativePosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - startingPosition);
+        double x_error = relativePosition - targetPosition;
+
+        drive.m_left.set(-x_error/targetPosition * k_p);
+        drive.m_right.set(-x_error/targetPosition * k_p);
     }
 
     @Override
     protected boolean isFinished() {
-        double relativePosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - startingPosition);
-        double targetPosition = 2048 * 10.71;
         if(loopCount++ % 20 == 0) System.out.println("Relative Position: " + relativePosition);
         return relativePosition >= targetPosition;
     }
