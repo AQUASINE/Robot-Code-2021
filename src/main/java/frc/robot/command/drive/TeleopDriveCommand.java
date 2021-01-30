@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystem.Drive;
 import frc.robot.subsystem.DriveImpl;
 
-class TeleopDriveCommand extends Command {
+public class TeleopDriveCommand extends Command {
     private DriveImpl drive;
     private Joystick joystick;
 
@@ -27,8 +27,6 @@ class TeleopDriveCommand extends Command {
         y = joystick.getY();
         z = joystick.getZ();
 
-        drive.setEachMotor(
-
-                );
+        drive.differentialDrive.curvatureDrive(x, y, joystick.getRawButton(1));
     }
 }

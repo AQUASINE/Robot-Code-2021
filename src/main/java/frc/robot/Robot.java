@@ -10,11 +10,13 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
@@ -46,8 +48,6 @@ public class Robot extends TimedRobot {
     System.out.println("Robot.Robot(): initialized all motors");
 
     drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
-
-
   } 
 
   @Override
@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-
+    Scheduler.getInstance().run();
   }
 
 
@@ -69,13 +69,14 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    Scheduler.getInstance().removeAll();
+    Scheduler.getInstance().add(new TeleopDriveCommand(drive, joystick));
+  }
 
 
   @Override
-  public void teleopPeriodic() {
-    drive.setAllMotors(joystick.getRawAxis(1));
-  }
+  public void teleopPeriodic() {}
 
 
   @Override
