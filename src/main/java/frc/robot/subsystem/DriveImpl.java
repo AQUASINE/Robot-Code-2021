@@ -1,13 +1,22 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveImpl extends Subsystem implements Drive {
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
   public WPI_TalonFX motorRightBack;
   public WPI_TalonFX motorLeftBack;
+
+
+  public SpeedController m_left;
+  public SpeedController m_right;
+
+  public DifferentialDrive differentialDrive;
 
   public DriveImpl(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
@@ -17,6 +26,11 @@ public class DriveImpl extends Subsystem implements Drive {
       this.motorLeftFront = motorLeftFront;
       this.motorRightBack = motorRightBack;
       this.motorLeftBack = motorLeftBack;
+
+      m_left = new SpeedControllerGroup(motorLeftBack, motorLeftFront);
+      m_right = new SpeedControllerGroup(motorRightBack, motorRightFront);
+
+      differentialDrive = new DifferentialDrive(m_left, m_right);
   }
 
   @Override
