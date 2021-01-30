@@ -48,11 +48,12 @@ public class Robot extends TimedRobot {
     System.out.println("Robot.Robot(): initialized all motors");
 
     drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
+    drive.m_left.setInverted(true);
   } 
 
   @Override
   public void robotInit() {
-    drive.m_left.setInverted(true);
+
   }
 
 
