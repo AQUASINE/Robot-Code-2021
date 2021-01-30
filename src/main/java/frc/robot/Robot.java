@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.command.auto.AutoPath1Command;
+import frc.robot.command.auto.RotateCommand;
 import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
 
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Scheduler.getInstance().removeAll();
     Scheduler.getInstance().add(new AutoPath1Command(drive));
+    Scheduler.getInstance().add(new RotateCommand(drive));
   }
 
 
