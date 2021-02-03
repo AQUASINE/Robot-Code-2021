@@ -3,7 +3,7 @@ package frc.robot.command.auto;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystem.DriveImpl;
 
-public class AutoPath1Command extends Command {
+public class DriveLengthPIDCommand extends Command {
     private DriveImpl drive;
     private double startingPosition = 0;
     private int loopCount;
@@ -11,7 +11,7 @@ public class AutoPath1Command extends Command {
     private double targetPosition;
     private final double k_p = 0.4;
 
-    public AutoPath1Command(DriveImpl drive) {
+    public DriveLengthPIDCommand(DriveImpl drive) {
         this.drive = drive;
         requires(drive);
     }

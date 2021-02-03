@@ -23,12 +23,13 @@ public class DriveImpl extends Subsystem implements Drive {
 
   public DriveImpl(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
-    WPI_TalonFX motorRightBack, WPI_TalonFX motorLeftBack
+    WPI_TalonFX motorRightBack, WPI_TalonFX motorLeftBack, ADIS16448_IMU gyro
     ) {
       this.motorRightFront = motorRightFront;
       this.motorLeftFront = motorLeftFront;
       this.motorRightBack = motorRightBack;
       this.motorLeftBack = motorLeftBack;
+      this.gyro = gyro;
 
       m_left = new SpeedControllerGroup(motorLeftBack, motorLeftFront);
       m_right = new SpeedControllerGroup(motorRightBack, motorRightFront);
