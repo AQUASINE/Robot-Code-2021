@@ -1,9 +1,10 @@
 package frc.robot.command.auto;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystem.DriveImpl;
 
-public class RotateConstantCommand extends Command {
+public class RotateConstantCommand extends CommandBase {
     private DriveImpl drive;
     private double startingAngle = 0;
     private double targetAngle;
@@ -13,16 +14,17 @@ public class RotateConstantCommand extends Command {
     public RotateConstantCommand(double targetAngle, DriveImpl drive) {
         this.drive = drive;
         this.targetAngle = targetAngle;
-        requires(drive);
+        addRequirements(drive);
     }
 
+
     @Override
-    protected void initialize() {
+    public void initialize() {
         startingAngle = drive.gyro.getAngle();
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         relativeAngle = drive.gyro.getAngle() - startingAngle;
 
         drive.m_right.set(-.1);
@@ -31,7 +33,7 @@ public class RotateConstantCommand extends Command {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if(loopCounter % 20 == 0) System.out.println("RotateConstantCommand.isFinished(): Relative Angle: " + relativeAngle +
                 " Current Angle: " + drive.gyro.getAngle());
         return relativeAngle >= targetAngle;

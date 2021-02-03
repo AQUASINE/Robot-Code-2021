@@ -1,9 +1,9 @@
 package frc.robot.command.auto;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystem.DriveImpl;
 
-public class RotatePIDCommand extends Command {
+public class RotatePIDCommand extends CommandBase {
     private DriveImpl drive;
     private double startingAngle = 0;
     private double targetAngle;
@@ -22,16 +22,16 @@ public class RotatePIDCommand extends Command {
 
     public RotatePIDCommand(double targetAngle, DriveImpl drive) {
         this.drive = drive;
-        requires(drive);
+        addRequirements(drive);
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         startingAngle = drive.gyro.getAngle();
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         relativeAngle = drive.gyro.getAngle() - startingAngle;
         currentSpeed = (relativeAngle - previousRelativeAngle) / dt;
 
@@ -44,7 +44,7 @@ public class RotatePIDCommand extends Command {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if(loopCounter % 20 == 0) System.out.println("RotateCommand.isFinished(): Relative Angle: " + relativeAngle +
                 " Current Angle: " + drive.gyro.getAngle());
         return relativeAngle >= targetAngle;

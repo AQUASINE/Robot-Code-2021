@@ -1,9 +1,9 @@
 package frc.robot.command.auto;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystem.DriveImpl;
 
-public class DriveLengthPIDCommand extends Command {
+public class DriveLengthPIDCommand extends CommandBase {
     private DriveImpl drive;
     private double startingPosition = 0;
     private int loopCount;
@@ -13,17 +13,17 @@ public class DriveLengthPIDCommand extends Command {
 
     public DriveLengthPIDCommand(DriveImpl drive) {
         this.drive = drive;
-        requires(drive);
+        addRequirements(drive);
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         startingPosition = drive.motorLeftBack.getSelectedSensorPosition();
         targetPosition = 4 * 2048 * 10.71;
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         relativePosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - startingPosition);
         double x_error = relativePosition - targetPosition;
 
@@ -32,7 +32,7 @@ public class DriveLengthPIDCommand extends Command {
     }
 
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if(loopCount++ % 20 == 0) System.out.println("Relative Position: " + relativePosition);
         return relativePosition >= targetPosition;
     }
