@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -12,6 +13,8 @@ public class DriveImpl extends Subsystem implements Drive {
   public WPI_TalonFX motorLeftFront;
   public WPI_TalonFX motorRightBack;
   public WPI_TalonFX motorLeftBack;
+
+  public ADIS16448_IMU gyro;
 
   public SpeedController m_left;
   public SpeedController m_right;
