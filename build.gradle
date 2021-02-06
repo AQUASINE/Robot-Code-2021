@@ -37,6 +37,12 @@ deploy {
     }
 }
 
+repositories {
+    maven {
+        url "http://maven.highcurrent.io/vendordeps/ADIS16448.json"
+    }
+}
+
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 
@@ -44,6 +50,7 @@ def includeDesktopSupport = false
 // Also defines JUnit 4.
 dependencies {
     implementation wpi.deps.wpilib()
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
@@ -53,6 +60,7 @@ dependencies {
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
     testImplementation 'junit:junit:4.12'
+    implementation 'org.mockito:mockito-core:3.7.7'
     implementation 'org.mockito:mockito-core:3.7.7'
 
     // Enable simulation gui support. Must check the box in vscode to enable support
