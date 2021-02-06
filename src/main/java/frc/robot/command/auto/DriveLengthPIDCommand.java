@@ -1,10 +1,10 @@
 package frc.robot.command.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystem.DriveImpl;
+import frc.robot.subsystem.DriveSubsystem;
 
 public class DriveLengthPIDCommand extends CommandBase {
-    private DriveImpl drive;
+    private DriveSubsystem drive;
     private double startingPosition = 0;
     private int loopCount;
     private double relativePosition;
@@ -14,7 +14,7 @@ public class DriveLengthPIDCommand extends CommandBase {
     private final double gearRatio = 10.71;
     private final double unitsPerRevolution = 2048;
 
-    public DriveLengthPIDCommand(double inches, DriveImpl drive) {
+    public DriveLengthPIDCommand(double inches, DriveSubsystem drive) {
         this.drive = drive;
         targetPosition = wheelDiameter * gearRatio * unitsPerRevolution * inches / (2 * Math.PI);
         addRequirements(drive);

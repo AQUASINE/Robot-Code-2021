@@ -14,16 +14,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.command.auto.DriveLengthConstantCommand;
-import frc.robot.command.auto.DriveLengthPIDCommand;
-import frc.robot.command.auto.RotateConstantCommand;
-import frc.robot.command.auto.RotatePIDCommand;
 import frc.robot.command.auto.autopaths.SquarePathCommandGroup;
 import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
-  private DriveImpl drive;
+  private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
 
   public WPI_TalonFX motorRightFront;
@@ -57,7 +53,7 @@ public class Robot extends TimedRobot {
 
     gyro = new ADIS16448_IMU();
 
-    drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+    drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
     drive.m_right.setInverted(true);
   } 
 

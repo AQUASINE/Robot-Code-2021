@@ -1,10 +1,10 @@
 package frc.robot.command.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystem.DriveImpl;
+import frc.robot.subsystem.DriveSubsystem;
 
 public class DriveLengthConstantCommand extends CommandBase {
-    private DriveImpl drive;
+    private DriveSubsystem drive;
     private double startingPosition = 0;
     private int loopCount;
     private int direction;
@@ -14,7 +14,7 @@ public class DriveLengthConstantCommand extends CommandBase {
     private final double gearRatio = 10.71;
     private final double unitsPerMotorRevolution = 2048;
 
-    public DriveLengthConstantCommand(double inches, DriveImpl drive) {
+    public DriveLengthConstantCommand(double inches, DriveSubsystem drive) {
         this.drive = drive;
         targetPosition = inches * gearRatio * unitsPerMotorRevolution / (Math.PI * wheelDiameter);
         direction = (int) Math.signum(inches);

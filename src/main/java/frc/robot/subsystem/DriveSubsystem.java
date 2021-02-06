@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveImpl extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase {
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
   public WPI_TalonFX motorRightBack;
@@ -21,7 +21,7 @@ public class DriveImpl extends SubsystemBase {
 
   public DifferentialDrive differentialDrive;
 
-  public DriveImpl(
+  public DriveSubsystem(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
     WPI_TalonFX motorRightBack, WPI_TalonFX motorLeftBack, ADIS16448_IMU gyro
     ) {

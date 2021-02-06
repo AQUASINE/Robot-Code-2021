@@ -1,17 +1,16 @@
 package frc.robot.command.auto;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystem.DriveImpl;
+import frc.robot.subsystem.DriveSubsystem;
 
 public class RotateConstantCommand extends CommandBase {
-    private DriveImpl drive;
+    private DriveSubsystem drive;
     private double startingAngle = 0;
     private double targetAngle;
     private double relativeAngle;
     private double loopCounter = 0;
 
-    public RotateConstantCommand(double targetAngle, DriveImpl drive) {
+    public RotateConstantCommand(double targetAngle, DriveSubsystem drive) {
         this.drive = drive;
         this.targetAngle = targetAngle;
         addRequirements(drive);

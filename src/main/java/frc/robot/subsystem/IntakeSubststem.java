@@ -1,4 +1,4 @@
 package frc.robot.subsystem;
 
-public class IntakeImpl {
+public class IntakeSubststem {
 }

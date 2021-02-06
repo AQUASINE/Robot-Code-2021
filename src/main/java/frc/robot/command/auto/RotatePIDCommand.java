@@ -1,10 +1,10 @@
 package frc.robot.command.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystem.DriveImpl;
+import frc.robot.subsystem.DriveSubsystem;
 
 public class RotatePIDCommand extends CommandBase {
-    private DriveImpl drive;
+    private DriveSubsystem drive;
     private double startingAngle = 0;
     private double targetAngle;
     private double targetSpeed;
@@ -20,7 +20,7 @@ public class RotatePIDCommand extends CommandBase {
 
     private final double dt = 0.05;
 
-    public RotatePIDCommand(double targetAngle, DriveImpl drive) {
+    public RotatePIDCommand(double targetAngle, DriveSubsystem drive) {
         this.drive = drive;
         addRequirements(drive);
     }
