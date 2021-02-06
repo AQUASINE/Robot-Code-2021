@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new GalacticSearchBBlueCommandGroup(drive));
+    CommandScheduler.getInstance().schedule(new GalacticSearchARedCommandGroup(drive));
   }
 
 
