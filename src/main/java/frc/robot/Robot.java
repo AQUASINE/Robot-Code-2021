@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.command.auto.autopaths.SquarePathCommandGroup;
+import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
 
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new SquarePathCommandGroup(drive));
+    CommandScheduler.getInstance().schedule(new GalacticSearchBBlueCommandGroup(drive));
   }
 
 
