@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveImpl extends SubsystemBase implements Drive {
+public class DriveImpl extends SubsystemBase {
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
   public WPI_TalonFX motorRightBack;
@@ -37,7 +37,6 @@ public class DriveImpl extends SubsystemBase implements Drive {
       differentialDrive = new DifferentialDrive(m_left, m_right);
   }
 
-  @Override
   public void setAllMotors(double value) {
     motorRightFront.set(value);
     motorLeftFront.set(-value);
@@ -45,7 +44,6 @@ public class DriveImpl extends SubsystemBase implements Drive {
     motorLeftBack.set(-value);
   }
 
-  @Override
   public void setEachMotor(double rf, double lf, double rb, double lb) {
     motorRightFront.set(rf);
     motorLeftFront.set(-lf);
