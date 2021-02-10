@@ -10,17 +10,23 @@ package frc.robot;
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
+import frc.robot.DashHelper;
 
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
+
+  public DashHelper dash;
 
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
@@ -36,6 +42,7 @@ public class Robot extends TimedRobot {
     // TODO: refactor port numbers into variables
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
+    DashHelper.getInstance().setUpPDPWidget(pdp);
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -59,7 +66,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-
+    dash = DashHelper.getInstance();
+    //gyro currently not working
+    SmartDashboard.putData(gyro);
   }
 
 
