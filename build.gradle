@@ -59,6 +59,7 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
+
     testImplementation 'junit:junit:4.12'
     implementation 'org.mockito:mockito-core:3.7.7'
     implementation 'org.mockito:mockito-core:3.7.7'
@@ -67,6 +68,8 @@ dependencies {
     // upon debugging
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
     simulation wpi.deps.sim.driverstation(wpi.platforms.desktop, false)
+
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Websocket extensions require additional configuration.
     // simulation wpi.deps.sim.ws_server(wpi.platforms.desktop, false)
