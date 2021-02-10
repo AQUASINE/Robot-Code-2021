@@ -14,6 +14,9 @@ public class PathDataModel {
         TypeToken<PathState[]> typeToken = new TypeToken<>(){};
 
         pathStates = gson.fromJson(json, typeToken.getType());
+    }
 
+    public PathState[] getPathStates() {
+        return pathStates;
     }
 }
