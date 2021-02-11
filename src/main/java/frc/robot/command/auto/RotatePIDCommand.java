@@ -27,12 +27,12 @@ public class RotatePIDCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        startingAngle = drive.gyro.getAngle();
+        startingAngle = drive.getGyroAngle();
     }
 
     @Override
     public void execute() {
-        relativeAngle = drive.gyro.getAngle() - startingAngle;
+        relativeAngle = drive.getGyroAngle() - startingAngle;
         currentSpeed = (relativeAngle - previousRelativeAngle) / dt;
 
         angleError = targetAngle - relativeAngle;
@@ -46,7 +46,7 @@ public class RotatePIDCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         if(loopCounter % 20 == 0) System.out.println("RotateCommand.isFinished(): Relative Angle: " + relativeAngle +
-                " Current Angle: " + drive.gyro.getAngle());
+                " Current Angle: " + drive.getGyroAngle());
         return relativeAngle >= targetAngle;
     }
 }

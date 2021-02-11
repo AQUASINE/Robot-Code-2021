@@ -23,12 +23,12 @@ public class DriveLengthConstantCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        startingPosition = drive.motorLeftBack.getSelectedSensorPosition();
+        startingPosition = drive.getEncoderValueLeftBack();
     }
 
     @Override
     public void execute() {
-        relativePosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - startingPosition);
+        relativePosition = Math.abs(drive.getEncoderValueLeftBack() - startingPosition);
         drive.m_left.set(direction * .1);
         drive.m_right.set(direction * .1);
     }
