@@ -17,6 +17,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystem.*;
+import frc.robot.Robot;
+
+
 
 public class DashHelper {
     private ShuffleboardTab mainDash;
@@ -30,6 +33,7 @@ public class DashHelper {
     public static NetworkTableEntry kD;
     public static NetworkTableEntry sbServoOpen;
     private static DashHelper dash;
+    public ADIS16448_IMU gyro;
 
     public static DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -49,7 +53,11 @@ public class DashHelper {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
         camera.setExposureAuto();
+        //SmartDashboard.putNumber("Encoder Distance", )
         mainDash.add("Camera", camera);
+
+
+
 
 
 
@@ -78,6 +86,8 @@ public class DashHelper {
         sbEncoderDistance.setDouble(distance);
     }
 
+    //public void setUpEncoder()
+
     public void setColor(Color color){
         sbRedValue.setDouble(color.red);
         sbGreenValue.setDouble(color.green);
@@ -86,8 +96,12 @@ public class DashHelper {
 
     public void setUpGyroWidget(ADIS16448_IMU gyro){
         mainDash.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
-        System.out.println("Tried to set up gyro");
+        //System.out.println("Tried to set up gyro");
     }
+
+    /*public void setUpCamera(CameraServer camera){
+        mainDash.add("Camera", camera)
+    }*/
 
     //not using mecanum
     /*public void setUpMechDriveWidget(MecanumDrive mechDrive){
@@ -95,7 +109,7 @@ public class DashHelper {
     }*/
     public void setUpPDPWidget(PowerDistributionPanel pdp){
         mainDash.add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel);
-        System.out.println("Tried to set up pdp widget");
+        //System.out.println("Tried to set up pdp widget");
     }
 
     public void setTimer(Timer timer){

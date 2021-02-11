@@ -25,6 +25,9 @@ import frc.robot.DashHelper;
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
+  //private double beginningPosition = 0;
+
+  //private double currentPosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - beginningPosition);
 
   public DashHelper dash;
 
@@ -43,6 +46,9 @@ public class Robot extends TimedRobot {
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
     DashHelper.getInstance().setUpPDPWidget(pdp);
+    DashHelper.getInstance().setUpGyroWidget(gyro);
+    //DashHelper.getInstance().setEncoder(currentPosition);
+    //DashHelper.getInstance().
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -66,9 +72,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
     dash = DashHelper.getInstance();
     //gyro currently not working
-    SmartDashboard.putData(gyro);
+    //SmartDashboard.putData(gyro);
+    //Shuffleboard.getTab("Main").add((Sendable) gyro);
   }
 
 
