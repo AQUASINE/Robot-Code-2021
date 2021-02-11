@@ -26,8 +26,14 @@ public class RotateConstantCommand extends CommandBase {
     public void execute() {
         relativeAngle = drive.gyro.getAngle() - startingAngle;
 
-        drive.m_right.set(-.1);
-        drive.m_left.set(.1);
+        if(targetAngle > 0){
+            drive.m_right.set(-.1);
+            drive.m_left.set(.1);
+        } else {
+            drive.m_right.set(.1);
+            drive.m_left.set(-.1);
+        }
+
         loopCounter++;
     }
 
@@ -35,6 +41,6 @@ public class RotateConstantCommand extends CommandBase {
     public boolean isFinished() {
         if(loopCounter % 20 == 0) System.out.println("RotateConstantCommand.isFinished(): Relative Angle: " + relativeAngle +
                 " Current Angle: " + drive.gyro.getAngle());
-        return relativeAngle >= targetAngle;
+        return Math.abs(relativeAngle) >= Math.abs(targetAngle);
     }
 }

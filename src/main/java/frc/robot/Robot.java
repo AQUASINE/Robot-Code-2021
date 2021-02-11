@@ -7,47 +7,82 @@
 
 package frc.robot;
 
+import com.analog.adis16448.frc.ADIS16448_IMU;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.command.auto.autopaths.*;
+import frc.robot.command.drive.TeleopDriveCommand;
 import frc.robot.subsystem.*;
+import frc.robot.DashHelper;
 
 public class Robot extends TimedRobot {
-  private Drive drive;
+  private DriveSubsystem drive;
+  public PowerDistributionPanel pdp;
 
-  public PWMVictorSPX motorRightFront;
-  public PWMVictorSPX motorLeftFront;
-  public PWMVictorSPX motorRightBack;
-  public PWMVictorSPX motorLeftBack;
+  public DashHelper dash;
+
+  public WPI_TalonFX motorRightFront;
+  public WPI_TalonFX motorLeftFront;
+  public WPI_TalonFX motorRightBack;
+  public WPI_TalonFX motorLeftBack;
+
+  public ADIS16448_IMU gyro;
 
   public Joystick joystick;
 
-
-  public Robot(){
+  public Robot() {
     joystick = new Joystick(0);
+    // TODO: refactor port numbers into variables
+    pdp = new PowerDistributionPanel();
+    pdp.clearStickyFaults();
+    DashHelper.getInstance().setUpPDPWidget(pdp);
 
-    motorRightFront = new PWMVictorSPX(0);
-    motorLeftFront = new PWMVictorSPX(1);
-    motorRightBack = new PWMVictorSPX(2);
-    motorLeftBack = new PWMVictorSPX(3);
+    System.out.println("Robot.Robot(): initializing motorRightFront");
+    motorRightFront = new WPI_TalonFX(0);
 
-    drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
-  }
-  
+    System.out.println("Robot.Robot(): initializing motorLeftFront");
+    motorRightBack = new WPI_TalonFX(1);
+
+    System.out.println("Robot.Robot(): initializing motorRightBack");
+    motorLeftFront = new WPI_TalonFX(2);
+
+    System.out.println("Robot.Robot(): initializing motorLeftBack");
+    motorLeftBack = new WPI_TalonFX(3);
+
+    System.out.println("Robot.Robot(): initialized all motors");
+
+    gyro = new ADIS16448_IMU();
+
+    drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+    drive.m_right.setInverted(true);
+  } 
+
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    dash = DashHelper.getInstance();
+    //gyro currently not working
+    SmartDashboard.putData(gyro);
+  }
 
 
   @Override
   public void robotPeriodic() {
-    System.out.println(joystick.getRawAxis(0));
+    CommandScheduler.getInstance().run();
   }
 
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().schedule(new GalacticSearchABlueCommandGroup(drive));
+  }
 
 
   @Override
@@ -55,7 +90,10 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+  }
 
 
   @Override
