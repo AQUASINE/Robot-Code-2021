@@ -7,73 +7,47 @@
 
 package frc.robot;
 
-import com.analog.adis16448.frc.ADIS16448_IMU;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.command.auto.autopaths.SquarePathCommandGroup;
-import frc.robot.command.drive.TeleopDriveCommand;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 import frc.robot.subsystem.*;
 
 public class Robot extends TimedRobot {
-  private DriveSubsystem drive;
-  public PowerDistributionPanel pdp;
+  private Drive drive;
 
-  public WPI_TalonFX motorRightFront;
-  public WPI_TalonFX motorLeftFront;
-  public WPI_TalonFX motorRightBack;
-  public WPI_TalonFX motorLeftBack;
-
-  public ADIS16448_IMU gyro;
+  public PWMVictorSPX motorRightFront;
+  public PWMVictorSPX motorLeftFront;
+  public PWMVictorSPX motorRightBack;
+  public PWMVictorSPX motorLeftBack;
 
   public Joystick joystick;
 
-  public Robot() {
+
+  public Robot(){
     joystick = new Joystick(0);
-    // TODO: refactor port numbers into variables
-    pdp = new PowerDistributionPanel();
-    pdp.clearStickyFaults();
 
-    System.out.println("Robot.Robot(): initializing motorRightFront");
-    motorRightFront = new WPI_TalonFX(0);
+    motorRightFront = new PWMVictorSPX(0);
+    motorLeftFront = new PWMVictorSPX(1);
+    motorRightBack = new PWMVictorSPX(2);
+    motorLeftBack = new PWMVictorSPX(3);
 
-    System.out.println("Robot.Robot(): initializing motorLeftFront");
-    motorRightBack = new WPI_TalonFX(1);
-
-    System.out.println("Robot.Robot(): initializing motorRightBack");
-    motorLeftFront = new WPI_TalonFX(2);
-
-    System.out.println("Robot.Robot(): initializing motorLeftBack");
-    motorLeftBack = new WPI_TalonFX(3);
-
-    System.out.println("Robot.Robot(): initialized all motors");
-
-    gyro = new ADIS16448_IMU();
-
-    drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
-    drive.m_right.setInverted(true);
-  } 
-
-  @Override
-  public void robotInit() {
-
+    drive = new DriveImpl(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack);
   }
+  
+  @Override
+  public void robotInit() {}
 
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    System.out.println(joystick.getRawAxis(0));
   }
 
 
   @Override
-  public void autonomousInit() {
-    CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new SquarePathCommandGroup(drive));
-  }
+  public void autonomousInit() {}
 
 
   @Override
@@ -81,10 +55,7 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void teleopInit() {
-    CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
-  }
+  public void teleopInit() {}
 
 
   @Override
