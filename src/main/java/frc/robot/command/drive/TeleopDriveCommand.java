@@ -26,6 +26,6 @@ public class TeleopDriveCommand extends CommandBase {
         y = joystick.getY();
         z = joystick.getZ();
 
-        drive.differentialDrive.arcadeDrive(-z, y);
+        drive.differentialDrive.arcadeDrive(z, y);
     }
 }
