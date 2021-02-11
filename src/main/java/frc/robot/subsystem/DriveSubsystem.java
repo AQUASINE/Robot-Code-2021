@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  public WPI_TalonFX motorRightFront;
-  public WPI_TalonFX motorLeftFront;
-  public WPI_TalonFX motorRightBack;
-  public WPI_TalonFX motorLeftBack;
+  private WPI_TalonFX motorRightFront;
+  private WPI_TalonFX motorLeftFront;
+  private WPI_TalonFX motorRightBack;
+  private WPI_TalonFX motorLeftBack;
 
-  public ADIS16448_IMU gyro;
+  private ADIS16448_IMU gyro;
 
   public SpeedController m_left;
   public SpeedController m_right;
@@ -49,5 +49,20 @@ public class DriveSubsystem extends SubsystemBase {
     motorLeftFront.set(-lf);
     motorRightBack.set(rb);
     motorLeftBack.set(-lb);
+  }
+
+  public double getGyroAngle() {
+    return gyro.getAngle();
+  }
+
+  public double getEncoderValueLeftBack() {
+    return motorLeftBack.getSelectedSensorPosition();
+  }
+
+  public double getEncoderInchesLeftBack() {
+    final double wheelDiameter = 6;
+    final double gearRatio = 10.71;
+    final double unitsPerRevolution = 2048;
+    return getEncoderValueLeftBack() / (gearRatio * unitsPerRevolution / (Math.PI * wheelDiameter));
   }
 }
