@@ -72,7 +72,7 @@ public class DashHelper {
 */
         sbServoOpen = mainDash.add("Servo open", false).getEntry();
 
-        kP = mainDash.add("P", 0.015).getEntry();
+        //kP = mainDash.add("P", 0.015).getEntry();
         kI = mainDash.add("I", 0).getEntry();
         kD = mainDash.add("D", 0).getEntry();
 

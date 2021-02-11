@@ -25,6 +25,7 @@ import frc.robot.DashHelper;
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
+  public double getEncoderValueLeftBack;
   //private double beginningPosition = 0;
 
   //private double currentPosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - beginningPosition);
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
     pdp.clearStickyFaults();
     DashHelper.getInstance().setUpPDPWidget(pdp);
     DashHelper.getInstance().setUpGyroWidget(gyro);
-    //DashHelper.getInstance().setEncoder(currentPosition);
+    DashHelper.getInstance().setEncoder(getEncoderValueLeftBack);
     //DashHelper.getInstance().
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
