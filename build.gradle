@@ -50,7 +50,7 @@ def includeDesktopSupport = false
 // Also defines JUnit 4.
 dependencies {
     implementation wpi.deps.wpilib()
-    implementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
@@ -59,28 +59,23 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    testCompile("org.junit.jupiter:junit-jupiter-params:5.7.0")
+
+    testImplementation 'junit:junit:4.12'
     implementation 'org.mockito:mockito-core:3.7.7'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.mockito:mockito-core:3.7.7'
 
     // Enable simulation gui support. Must check the box in vscode to enable support
     // upon debugging
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
     simulation wpi.deps.sim.driverstation(wpi.platforms.desktop, false)
 
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Websocket extensions require additional configuration.
     // simulation wpi.deps.sim.ws_server(wpi.platforms.desktop, false)
     // simulation wpi.deps.sim.ws_client(wpi.platforms.desktop, false)
 }
-
-
-
-test {
-    useJUnitPlatform()
-}
-
 
 // Simulation configuration (e.g. environment variables).
 sim {
