@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
     pdp.clearStickyFaults();
     DashHelper.getInstance().setUpPDPWidget(pdp);
     DashHelper.getInstance().setUpGyroWidget(gyro);
+    DashHelper.getInstance().setUpEncoderWidget(drive);
     //DashHelper.getInstance().setEncoder(getEncoderValueLeftBack);*/
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
@@ -87,6 +88,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    SmartDashboard.updateValues();
   }
 
 

@@ -14,6 +14,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystem.*;
@@ -35,6 +36,8 @@ public class DashHelper {
     private static DashHelper dash;
     public ADIS16448_IMU gyro;
     public PowerDistributionPanel pdp;
+    public DriveSubsystem drive;
+    public String widgetName;
 
 
     public static DashHelper getInstance(){
@@ -53,21 +56,10 @@ public class DashHelper {
     private void startDash(){
         mainDash = Shuffleboard.getTab("Main");
 
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
-        camera.setExposureAuto();
-        //SmartDashboard.putNumber("Encoder Distance", )
-        mainDash.add("Camera", camera);
-
-        //mainDash.add("gyro", gyro);
-        //SmartDashboard.putNumber("Encoder", DriveSubsystem.getEncoderValueLeftBack());
-
-
-
-
-
-
-
+        //UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        //camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
+        //camera.setExposureAuto();
+        //mainDash.add("Camera", camera);
 
         /*sbSpeedTest = mainDash.add("Speed", Constants.kSpeed).getEntry();
         sbTimer = mainDash.add("Timer", 0).getEntry();
@@ -84,6 +76,7 @@ public class DashHelper {
         kD = mainDash.add("D", 0).getEntry();
 
         SmartDashboard.putNumber("2", 2);
+
         //SmartDashboard.putNumber("gyro angle", );
         //Shuffleboard.selectTab("Main");
         //Shuffleboard.startRecording();
@@ -103,8 +96,14 @@ public class DashHelper {
     }
 
     public void setUpGyroWidget(ADIS16448_IMU gyro){
-        mainDash.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
+        //mainDash.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
+        SmartDashboard.putNumber("Gyro", gyro.getAngle());
         //System.out.println("Tried to set up gyro");
+    }
+
+    public void setUpEncoderWidget(DriveSubsystem drive){
+        mainDash.add("Encoder", drive.getEncoderValueLeftBack()).withWidget(BuiltInWidgets.kEncoder);
+        //System.out.println("Tried to set up encoder");
     }
 
     /*public void setUpCamera(CameraServer camera){
