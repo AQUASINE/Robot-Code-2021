@@ -34,6 +34,8 @@ public class DashHelper {
     public static NetworkTableEntry sbServoOpen;
     private static DashHelper dash;
     public ADIS16448_IMU gyro;
+    public PowerDistributionPanel pdp;
+
 
     public static DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -50,11 +52,16 @@ public class DashHelper {
 
     private void startDash(){
         mainDash = Shuffleboard.getTab("Main");
+
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
         camera.setExposureAuto();
         //SmartDashboard.putNumber("Encoder Distance", )
         mainDash.add("Camera", camera);
+
+        //mainDash.add("gyro", gyro);
+        //SmartDashboard.putNumber("Encoder", DriveSubsystem.getEncoderValueLeftBack());
+
 
 
 
@@ -72,13 +79,14 @@ public class DashHelper {
 */
         sbServoOpen = mainDash.add("Servo open", false).getEntry();
 
-        //kP = mainDash.add("P", 0.015).getEntry();
+        kP = mainDash.add("P", 0.015).getEntry();
         kI = mainDash.add("I", 0).getEntry();
         kD = mainDash.add("D", 0).getEntry();
 
-        //SmartDashboard.putNumber("")
-        Shuffleboard.selectTab("Main");
-        Shuffleboard.startRecording();
+        SmartDashboard.putNumber("2", 2);
+        //SmartDashboard.putNumber("gyro angle", );
+        //Shuffleboard.selectTab("Main");
+        //Shuffleboard.startRecording();
 
     }
 
@@ -107,6 +115,7 @@ public class DashHelper {
     /*public void setUpMechDriveWidget(MecanumDrive mechDrive){
         mainDash.add("Mecanum Drive", mechDrive).withWidget(BuiltInWidgets.kMecanumDrive);
     }*/
+
     public void setUpPDPWidget(PowerDistributionPanel pdp){
         mainDash.add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel);
         //System.out.println("Tried to set up pdp widget");

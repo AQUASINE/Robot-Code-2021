@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.auto.autopaths.*;
@@ -41,15 +42,17 @@ public class Robot extends TimedRobot {
 
   public Joystick joystick;
 
+  private ShuffleboardTab mainDash;
+
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
+    gyro = new ADIS16448_IMU();
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
     DashHelper.getInstance().setUpPDPWidget(pdp);
     DashHelper.getInstance().setUpGyroWidget(gyro);
-    DashHelper.getInstance().setEncoder(getEncoderValueLeftBack);
-    //DashHelper.getInstance().
+    //DashHelper.getInstance().setEncoder(getEncoderValueLeftBack);*/
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -65,7 +68,7 @@ public class Robot extends TimedRobot {
 
     System.out.println("Robot.Robot(): initialized all motors");
 
-    gyro = new ADIS16448_IMU();
+
 
     drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
     drive.m_right.setInverted(true);
@@ -74,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    dash = DashHelper.getInstance();
+    //dash = DashHelper.getInstance();
     //gyro currently not working
     //SmartDashboard.putData(gyro);
     //Shuffleboard.getTab("Main").add((Sendable) gyro);
