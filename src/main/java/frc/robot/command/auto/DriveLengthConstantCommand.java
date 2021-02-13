@@ -10,27 +10,24 @@ public class DriveLengthConstantCommand extends CommandBase {
     private int direction;
     private double relativePosition;
     private double targetPosition;
-    private final double wheelDiameter = 6;
-    private final double gearRatio = 10.71;
-    private final double unitsPerMotorRevolution = 2048;
 
     public DriveLengthConstantCommand(double inches, DriveSubsystem drive) {
         this.drive = drive;
-        targetPosition = inches * gearRatio * unitsPerMotorRevolution / (Math.PI * wheelDiameter);
+        targetPosition = inches;
         direction = (int) Math.signum(inches);
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
-        startingPosition = drive.getEncoderValueLeftBack();
+        startingPosition = drive.getEncoderInchesLeftBack();
     }
 
     @Override
     public void execute() {
-        relativePosition = Math.abs(drive.getEncoderValueLeftBack() - startingPosition);
-        drive.m_left.set(direction * .1);
-        drive.m_right.set(direction * .1);
+        relativePosition = Math.abs(drive.getEncoderInchesLeftBack() - startingPosition);
+        drive.setLeft(direction * .1);
+        drive.setRight(direction * .1);
     }
 
     @Override

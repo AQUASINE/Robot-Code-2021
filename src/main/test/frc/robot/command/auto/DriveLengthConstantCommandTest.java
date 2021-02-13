@@ -16,7 +16,6 @@ import static org.mockito.Mockito.*;
 class DriveLengthConstantCommandTest {
 
     private DriveLengthConstantCommand command;
-
     private DriveSubsystem mockDriveSubsystem;
     @BeforeEach
     public void setUp() {
@@ -28,17 +27,33 @@ class DriveLengthConstantCommandTest {
 
     @Test
     @DisplayName("isFinished should return false when initialized with a number greater than zero")
-    public void testIsFinishedPositive() {
+    public void testIsFinishedFalseWhenPositiveStart() {
         command = new DriveLengthConstantCommand(48, mockDriveSubsystem);
         assertFalse(command.isFinished());
     }
 
     @Test
     @DisplayName("isFinished should return false when initialized with a number less than zero")
-    public void testIsFinishedNegative() {
+    public void testIsFinishedFalseWhenNegativeStart() {
         command = new DriveLengthConstantCommand(-48, mockDriveSubsystem);
         assertFalse(command.isFinished());
     }
-    
-    
+    @Test
+    @DisplayName("isFinished should return true when initialized with a number greater than the target")
+    public void testIsFinishedTrueWhenPositiveEnd(){
+        command = new DriveLengthConstantCommand(48, mockDriveSubsystem);
+        command.initialize();
+        when(mockDriveSubsystem.getEncoderInchesLeftBack()).thenReturn(49.0);
+        command.execute();
+        assertTrue(command.isFinished());
+    }
+    @Test
+    @DisplayName("isFinished should return true when initialized with a number less than the target")
+    public void testIsFinishedTrueWhenNegativeEnd(){
+        command = new DriveLengthConstantCommand(-48, mockDriveSubsystem);
+        command.initialize();
+        when(mockDriveSubsystem.getEncoderInchesLeftBack()).thenReturn(-49.0);
+        command.execute();
+        assertTrue(command.isFinished());
+    }
 }

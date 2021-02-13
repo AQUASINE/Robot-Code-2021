@@ -65,4 +65,11 @@ public class DriveSubsystem extends SubsystemBase {
     final double unitsPerRevolution = 2048;
     return getEncoderValueLeftBack() / (gearRatio * unitsPerRevolution / (Math.PI * wheelDiameter));
   }
+  public void setRight(double num){
+    m_right.set(num);
+  }
+  public void setLeft(double num){
+    m_left.set(num);
+  }
 }
+
