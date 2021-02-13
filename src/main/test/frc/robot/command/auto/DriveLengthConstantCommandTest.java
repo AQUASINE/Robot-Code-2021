@@ -16,7 +16,6 @@ import static org.mockito.Mockito.*;
 class DriveLengthConstantCommandTest {
 
     private DriveLengthConstantCommand command;
-
     private DriveSubsystem mockDriveSubsystem;
     @BeforeEach
     public void setUp() {
