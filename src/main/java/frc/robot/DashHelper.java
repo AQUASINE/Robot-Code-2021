@@ -12,13 +12,15 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystem.*;
 
+import java.util.Map;
+
 public class DashHelper {
     public DriveSubsystem drive;
     public ADIS16448_IMU gyro;
     public PowerDistributionPanel pdp;
     public Encoder encoder;
     public UsbCamera camera;
-    //private ShuffleboardTab mainTab;
+    public double robotSpeed;
     private static frc.robot.DashHelper dash;
 
     public static frc.robot.DashHelper getInstance(){
@@ -31,13 +33,16 @@ public class DashHelper {
     }
 
     private void startDashboard(){
-
+        Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0, "max", 1));
         /*ComplexWidget makeGyro = Shuffleboard.getTab("Main")
                 .add("Gyro", gyro)
                 .withWidget(BuiltInWidgets.kGyro); */
 
         //mainTab.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
     }
+
+
 
     public void setUpGyroWidget(ADIS16448_IMU gyro) {
         Shuffleboard.getTab("Main").add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
