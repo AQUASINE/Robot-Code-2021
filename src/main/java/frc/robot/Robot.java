@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.*;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
 
   public ADIS16448_IMU gyro;
   public Encoder encoder;
+  public UsbCamera camera;
 
   public Joystick joystick;
 
@@ -44,6 +47,8 @@ public class Robot extends TimedRobot {
     gyro = new ADIS16448_IMU();
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
+    camera = CameraServer.getInstance().startAutomaticCapture();
+    DashHelper.getInstance().setUpCamera(camera);
     DashHelper.getInstance().setUpPDPWidget(pdp);
     DashHelper.getInstance().setUpGyroWidget(gyro);
 

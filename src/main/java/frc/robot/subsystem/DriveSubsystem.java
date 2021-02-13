@@ -2,10 +2,13 @@ package frc.robot.subsystem;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -20,6 +23,13 @@ public class DriveSubsystem extends SubsystemBase {
   public SpeedController m_right;
 
   public DifferentialDrive differentialDrive;
+
+  public double robotSpeed;
+
+  //added for shuffleboard, not tested
+  private ShuffleboardTab tab = Shuffleboard.getTab("Main");
+  private NetworkTableEntry maxSpeed = tab.addPersistent("Max Speed", 1)
+          .getEntry();
 
 
   public DriveSubsystem(
@@ -38,6 +48,7 @@ public class DriveSubsystem extends SubsystemBase {
       differentialDrive = new DifferentialDrive(m_left, m_right);
   }
 
+
   public void setAllMotors(double value) {
     motorRightFront.set(value);
     motorLeftFront.set(-value);
@@ -51,6 +62,13 @@ public class DriveSubsystem extends SubsystemBase {
     motorRightBack.set(rb);
     motorLeftBack.set(-lb);
   }
+
+  //added for shuffleboard, not tested
+  public void setSpeed(double value) {
+    double max = maxSpeed.getDouble(1.0);
+    setAllMotors(value * max);
+  }
+
 
   public double getGyroAngle() {
     return gyro.getAngle();

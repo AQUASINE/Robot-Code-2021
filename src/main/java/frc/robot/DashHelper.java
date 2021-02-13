@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -35,14 +36,21 @@ public class DashHelper {
     private void startDashboard(){
         Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1));
+
+
+
+
         /*ComplexWidget makeGyro = Shuffleboard.getTab("Main")
-                .add("Gyro", gyro)
+                .add("Gyro", gyro)0
                 .withWidget(BuiltInWidgets.kGyro); */
 
         //mainTab.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
+
     }
 
-
+    public void setUpCamera(UsbCamera camera) {
+        Shuffleboard.getTab("Main").add("Camera", camera).withWidget(BuiltInWidgets.kCameraStream);
+    }
 
     public void setUpGyroWidget(ADIS16448_IMU gyro) {
         Shuffleboard.getTab("Main").add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
