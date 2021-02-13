@@ -9,11 +9,8 @@ package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,10 +23,6 @@ import frc.robot.DashHelper;
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
-  public double getEncoderValueLeftBack;
-  //private double beginningPosition = 0;
-
-  //private double currentPosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - beginningPosition);
 
   public DashHelper dash;
 
@@ -39,6 +32,7 @@ public class Robot extends TimedRobot {
   public WPI_TalonFX motorLeftBack;
 
   public ADIS16448_IMU gyro;
+  public Encoder encoder;
 
   public Joystick joystick;
 
@@ -52,8 +46,6 @@ public class Robot extends TimedRobot {
     pdp.clearStickyFaults();
     DashHelper.getInstance().setUpPDPWidget(pdp);
     DashHelper.getInstance().setUpGyroWidget(gyro);
-    DashHelper.getInstance().setUpEncoderWidget(drive);
-    //DashHelper.getInstance().setEncoder(getEncoderValueLeftBack);*/
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -77,11 +69,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    DashHelper.getInstance();
 
-    //dash = DashHelper.getInstance();
-    //gyro currently not working
-    //SmartDashboard.putData(gyro);
-    //Shuffleboard.getTab("Main").add((Sendable) gyro);
   }
 
 
