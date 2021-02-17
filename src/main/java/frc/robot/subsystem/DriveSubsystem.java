@@ -7,9 +7,13 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.Map;
 
 public class DriveSubsystem extends SubsystemBase {
   private WPI_TalonFX motorRightFront;
@@ -25,11 +29,6 @@ public class DriveSubsystem extends SubsystemBase {
   public DifferentialDrive differentialDrive;
 
   public double robotSpeed;
-
-  //added for shuffleboard, not tested
-  private ShuffleboardTab tab = Shuffleboard.getTab("Main");
-  private NetworkTableEntry maxSpeed = tab.addPersistent("Max Speed", 1)
-          .getEntry();
 
 
   public DriveSubsystem(
@@ -65,8 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   //added for shuffleboard, not tested
   public void setSpeed(double value) {
-    double max = maxSpeed.getDouble(1.0);
-    setAllMotors(value * max);
+    setAllMotors(value * robotSpeed);
   }
 
 

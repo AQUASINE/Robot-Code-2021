@@ -10,15 +10,17 @@ public class DriveLengthConstantCommand extends CommandBase {
     private int direction;
     private double relativePosition;
     private double targetPosition;
+    private double driveSpeed;
     private final double wheelDiameter = 6;
     private final double gearRatio = 10.71;
     private final double unitsPerMotorRevolution = 2048;
 
-    public DriveLengthConstantCommand(double inches, DriveSubsystem drive) {
+    public DriveLengthConstantCommand(double inches, DriveSubsystem drive, double robotSpeed) {
         this.drive = drive;
         targetPosition = inches * gearRatio * unitsPerMotorRevolution / (Math.PI * wheelDiameter);
         direction = (int) Math.signum(inches);
         addRequirements(drive);
+        driveSpeed = robotSpeed;
     }
 
     @Override
@@ -29,8 +31,8 @@ public class DriveLengthConstantCommand extends CommandBase {
     @Override
     public void execute() {
         relativePosition = Math.abs(drive.getEncoderValueLeftBack() - startingPosition);
-        drive.m_left.set(direction * .1);
-        drive.m_right.set(direction * .1);
+        drive.m_left.set(direction * driveSpeed);
+        drive.m_right.set(direction * driveSpeed);
     }
 
     @Override

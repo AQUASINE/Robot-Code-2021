@@ -41,6 +41,8 @@ public class Robot extends TimedRobot {
 
   private ShuffleboardTab mainDash;
 
+  public double robotSpeed;
+
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
@@ -89,7 +91,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new GalacticSearchABlueCommandGroup(drive));
+    CommandScheduler.getInstance().schedule(new GalacticSearchABlueCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
   }
 
 

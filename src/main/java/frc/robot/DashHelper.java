@@ -23,6 +23,7 @@ public class DashHelper {
     public UsbCamera camera;
     public double robotSpeed;
     private static frc.robot.DashHelper dash;
+    public NetworkTableEntry maxSpeed;
 
     public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -34,18 +35,8 @@ public class DashHelper {
     }
 
     private void startDashboard(){
-        Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0, "max", 1));
-
-
-
-
-        /*ComplexWidget makeGyro = Shuffleboard.getTab("Main")
-                .add("Gyro", gyro)0
-                .withWidget(BuiltInWidgets.kGyro); */
-
-        //mainTab.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
-
+        maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0, "max", 1)).getEntry();
     }
 
     public void setUpCamera(UsbCamera camera) {
