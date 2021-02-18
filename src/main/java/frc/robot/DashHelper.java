@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -24,6 +25,7 @@ public class DashHelper {
     public double robotSpeed;
     private static frc.robot.DashHelper dash;
     public NetworkTableEntry maxSpeed;
+    public WPI_TalonFX motorLeftBack;
 
     public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -37,10 +39,20 @@ public class DashHelper {
     private void startDashboard(){
         maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
+
+
     }
+
+    /*public void setUpEncoderWidget(double encoderDistance) {
+        Shuffleboard.getTab("Main").add("Encoder", encoderDistance);
+    }*/
 
     public void setUpCamera(UsbCamera camera) {
         Shuffleboard.getTab("Main").add("Camera", camera).withWidget(BuiltInWidgets.kCameraStream);
+    }
+
+    public void setUpEncoderWidget(double encoderDistance) {
+        Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance).getEntry();
     }
 
     public void setUpGyroWidget(ADIS16448_IMU gyro) {

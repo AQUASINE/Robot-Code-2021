@@ -43,6 +43,8 @@ public class Robot extends TimedRobot {
 
   public double robotSpeed;
 
+  public boolean driveExists;
+
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
@@ -68,11 +70,15 @@ public class Robot extends TimedRobot {
 
     System.out.println("Robot.Robot(): initialized all motors");
 
-
-
     drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
     drive.m_right.setInverted(true);
-  } 
+    driveExists = true;
+
+
+    DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
+  }
+
+
 
   @Override
   public void robotInit() {
@@ -85,6 +91,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     SmartDashboard.updateValues();
+    Shuffleboard.update();
   }
 
 

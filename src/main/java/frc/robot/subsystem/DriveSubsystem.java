@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DashHelper;
 
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double robotSpeed;
 
+  public boolean driveExists;
+
 
   public DriveSubsystem(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
@@ -46,6 +49,11 @@ public class DriveSubsystem extends SubsystemBase {
 
       differentialDrive = new DifferentialDrive(m_left, m_right);
   }
+
+ /* private ShuffleboardTab tab = Shuffleboard.getTab("Main");
+
+  private SimpleWidget distance.add("Encoder Distance", getEncoderValueLeftBack())
+                  .getEntry();*/
 
 
   public void setAllMotors(double value) {
@@ -66,6 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void setSpeed(double value) {
     setAllMotors(value * robotSpeed);
   }
+
 
 
   public double getGyroAngle() {
