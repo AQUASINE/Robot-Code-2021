@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystem.*;
 
 import java.util.Map;
@@ -26,6 +27,7 @@ public class DashHelper {
     private static frc.robot.DashHelper dash;
     public NetworkTableEntry maxSpeed;
     public WPI_TalonFX motorLeftBack;
+    public NetworkTableEntry light;
 
     public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -39,6 +41,12 @@ public class DashHelper {
     private void startDashboard(){
         maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
+
+
+
+        /*light = Shuffleboard.getTab("Main").add("Light", false)
+                .withWidget("Boolean Box")
+                .withProperties(Map.of("colorWhenTrue", "green", "colorWhenFalse", "red")).getEntry();*/
 
 
     }
@@ -62,4 +70,20 @@ public class DashHelper {
     public void setUpPDPWidget(PowerDistributionPanel pdp) {
         Shuffleboard.getTab("Main").add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel);
     }
+
+    public void setUpLightOn(){
+        Shuffleboard.getTab("Main").add("Light", false);
+    }
+
+    public void setUpLightEnabled(){
+        Shuffleboard.getTab("Main").add("Light", true);
+    }
+
+    /*public void lightOn(Color color){
+        light.setDouble(color.red);
+    }
+
+    public void lightEnabled(Color color){
+        light.setDouble(color.green);
+    }*/
 }

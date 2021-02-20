@@ -11,6 +11,7 @@ import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.*;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
 
@@ -44,6 +46,8 @@ public class Robot extends TimedRobot {
   public double robotSpeed;
 
   public boolean driveExists;
+  public boolean robotEnabled;
+  public NetworkTableEntry light;
 
   public Robot() {
     joystick = new Joystick(0);
@@ -98,18 +102,22 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new GalacticSearchABlueCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
+    CommandScheduler.getInstance().schedule(new GalacticSearchBRedCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
+    //light.setBoolean(true);
   }
 
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+
+  }
 
 
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
     CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+    //light.setBoolean(true);
   }
 
 
@@ -118,7 +126,9 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    //light.setBoolean(false);
+  }
 
 
   @Override
