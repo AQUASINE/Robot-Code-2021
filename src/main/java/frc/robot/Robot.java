@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
 import edu.wpi.first.wpilibj.util.Color;
+import java.util.ArrayList;
+import com.ctre.phoenix.music.Orchestra;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
 
@@ -48,12 +50,14 @@ public class Robot extends TimedRobot {
   public boolean driveExists;
   public boolean robotEnabled;
   public NetworkTableEntry light;
+  public Orchestra orchestra;
 
   public Robot() {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
     gyro = new ADIS16448_IMU();
     pdp = new PowerDistributionPanel();
+    orchestra = new Orchestra();
     pdp.clearStickyFaults();
     camera = CameraServer.getInstance().startAutomaticCapture();
     DashHelper.getInstance().setUpCamera(camera);
@@ -80,6 +84,12 @@ public class Robot extends TimedRobot {
 
 
     DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
+    orchestra.loadMusic("WiiSports.chrp");
+    orchestra.addInstrument(motorLeftBack);
+    /*orchestra.addInstrument(motorLeftFront);
+    orchestra.addInstrument(motorRightBack);
+    orchestra.addInstrument(motorRightFront);*/
+    orchestra.play();
   }
 
 
