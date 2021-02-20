@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -59,10 +60,10 @@ public class Robot extends TimedRobot {
     pdp = new PowerDistributionPanel();
     orchestra = new Orchestra();
     pdp.clearStickyFaults();
-    camera = CameraServer.getInstance().startAutomaticCapture();
-    DashHelper.getInstance().setUpCamera(camera);
-    DashHelper.getInstance().setUpPDPWidget(pdp);
-    DashHelper.getInstance().setUpGyroWidget(gyro);
+    //camera = CameraServer.getInstance().startAutomaticCapture();
+    //DashHelper.getInstance().setUpCamera(camera);
+    //DashHelper.getInstance().setUpPDPWidget(pdp);
+    //DashHelper.getInstance().setUpGyroWidget(gyro);
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -78,41 +79,50 @@ public class Robot extends TimedRobot {
 
     System.out.println("Robot.Robot(): initialized all motors");
 
-    drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
-    drive.m_right.setInverted(true);
-    driveExists = true;
+    //to make music work, comment out drive
+    //drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+    //drive.m_right.setInverted(true);
+    //driveExists = true;
+
+    //DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
 
 
-    DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
-    orchestra.loadMusic("WiiSports.chrp");
-    orchestra.addInstrument(motorLeftBack);
-    /*orchestra.addInstrument(motorLeftFront);
-    orchestra.addInstrument(motorRightBack);
-    orchestra.addInstrument(motorRightFront);*/
-    orchestra.play();
+
   }
 
 
 
   @Override
   public void robotInit() {
-    DashHelper.getInstance();
+    //DashHelper.getInstance();
+    orchestra.loadMusic("Pokemon.chrp");
+    orchestra.addInstrument(motorLeftBack);
+    orchestra.addInstrument(motorLeftFront);
+    orchestra.addInstrument(motorRightBack);
+    orchestra.addInstrument(motorRightFront);
+    /*motorLeftBack.set(ControlMode.MusicTone, 1);
+    motorLeftFront.set(ControlMode.MusicTone, 1);
+    motorRightBack.set(ControlMode.MusicTone, 1);
+    motorRightFront.set(ControlMode.MusicTone, 1);*/
+    orchestra.stop();
+    orchestra.play();
+
 
   }
 
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-    SmartDashboard.updateValues();
-    Shuffleboard.update();
+    //CommandScheduler.getInstance().run();
+    //SmartDashboard.updateValues();
+    //Shuffleboard.update();
   }
 
 
   @Override
   public void autonomousInit() {
-    CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new GalacticSearchBRedCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
+    //CommandScheduler.getInstance().cancelAll();
+    //CommandScheduler.getInstance().schedule(new GalacticSearchBRedCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
     //light.setBoolean(true);
   }
 
@@ -125,9 +135,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+    //CommandScheduler.getInstance().cancelAll();
+    //CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+
+
     //light.setBoolean(true);
+
   }
 
 
