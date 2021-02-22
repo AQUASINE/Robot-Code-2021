@@ -96,6 +96,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     //DashHelper.getInstance();
     orchestra.loadMusic("Pokemon.chrp");
+    //try orchestra.clearInstruments before this
+    //try orchestra.loadMusic after adding the instruments
     orchestra.addInstrument(motorLeftBack);
     orchestra.addInstrument(motorLeftFront);
     orchestra.addInstrument(motorRightBack);
@@ -106,8 +108,6 @@ public class Robot extends TimedRobot {
     motorRightFront.set(ControlMode.MusicTone, 1);*/
     orchestra.stop();
     orchestra.play();
-
-
   }
 
 
