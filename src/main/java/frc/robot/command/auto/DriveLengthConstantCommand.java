@@ -31,8 +31,8 @@ public class DriveLengthConstantCommand extends CommandBase {
     @Override
     public void execute() {
         relativePosition = Math.abs(drive.getEncoderValueLeftBack() - startingPosition);
-        drive.m_left.set(direction * driveSpeed);
-        drive.m_right.set(direction * driveSpeed);
+        drive.m_left.set(-direction * driveSpeed);
+        drive.m_right.set(-direction * driveSpeed);
     }
 
     @Override
