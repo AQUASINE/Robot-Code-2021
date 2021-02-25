@@ -24,8 +24,10 @@ public class DashHelper {
     public Encoder encoder;
     public UsbCamera camera;
     public double robotSpeed;
+    public boolean music;
     private static frc.robot.DashHelper dash;
     public NetworkTableEntry maxSpeed;
+    public NetworkTableEntry musicButton;
     public WPI_TalonFX motorLeftBack;
     public NetworkTableEntry light;
 
@@ -42,7 +44,7 @@ public class DashHelper {
         maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
 
-
+        musicButton = Shuffleboard.getTab("Main").addPersistent("Music Button", music).withWidget(BuiltInWidgets.kToggleButton).getEntry();
 
         /*light = Shuffleboard.getTab("Main").add("Light", false)
                 .withWidget("Boolean Box")
