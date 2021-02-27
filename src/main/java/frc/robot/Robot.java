@@ -50,14 +50,23 @@ public class Robot extends TimedRobot {
 
   public boolean driveExists;
   public boolean robotEnabled;
-  private boolean musicMode;
+  //private boolean musicMode;
   public NetworkTableEntry light;
   public Orchestra orchestra;
+  public NetworkTableEntry musicButton;
+  public boolean music;
+  public boolean musicMode;
+  public String song;
+  public NetworkTableEntry songSelection;
 
   //music mode is used to play .chrp files from the motors but is not necessary for the robot to work
   public Robot() {
+    DashHelper.getInstance();
+    musicMode = DashHelper.getInstance().getMusicMode();
+    //musicMode = musicButton.getBoolean(false);
+    //musicMode = true;
 
-
+    //music = true;
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
     gyro = new ADIS16448_IMU();
@@ -65,9 +74,9 @@ public class Robot extends TimedRobot {
     orchestra = new Orchestra();
     pdp.clearStickyFaults();
     camera = CameraServer.getInstance().startAutomaticCapture();
-    //DashHelper.getInstance().setUpCamera(camera);
-    //DashHelper.getInstance().setUpPDPWidget(pdp);
-    //DashHelper.getInstance().setUpGyroWidget(gyro);
+    DashHelper.getInstance().setUpCamera(camera);
+    DashHelper.getInstance().setUpPDPWidget(pdp);
+    DashHelper.getInstance().setUpGyroWidget(gyro);
 
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
@@ -88,24 +97,26 @@ public class Robot extends TimedRobot {
 
 
 
+
+
   @Override
   public void robotInit() {
-    DashHelper.getInstance();
     //works if it is set to true;, otherwise does not
-    musicMode = DashHelper.getInstance().musicButton.getBoolean(true);
-    if (!musicMode) {
-      drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
-      drive.m_right.setInverted(true);
-      driveExists = true;
-      DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
-    }
+    //musicMode = music;
+    //System.out.println ("musicMode = " + musicMode);
+    //musicMode = true;
     if(musicMode){
-      orchestra.loadMusic("WiiSports.chrp");
+      orchestra.loadMusic("StillAlive.chrp");
       orchestra.addInstrument(motorLeftBack);
       orchestra.addInstrument(motorLeftFront);
       orchestra.addInstrument(motorRightBack);
       orchestra.addInstrument(motorRightFront);
       orchestra.play();
+    } else {
+      drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+      drive.m_right.setInverted(true);
+      driveExists = true;
+      DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
     }
   }
 
@@ -115,10 +126,9 @@ public class Robot extends TimedRobot {
     if(!musicMode) {
       CommandScheduler.getInstance().run();
     }
-    if (musicMode) {
       SmartDashboard.updateValues();
       Shuffleboard.update();
-    }
+      //musicButton.setBoolean(music);
   }
 
 
