@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
 
-  public DashHelper dash;
+  //public DashHelper dash;
 
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
@@ -39,25 +39,27 @@ public class Robot extends TimedRobot {
   public WPI_TalonFX motorLeftBack;
 
   public ADIS16448_IMU gyro;
-  public Encoder encoder;
+  //public Encoder encoder;
   public UsbCamera camera;
 
   public Joystick joystick;
 
-  private ShuffleboardTab mainDash;
+  //private ShuffleboardTab mainDash;
 
-  public double robotSpeed;
+  //public double robotSpeed;
 
   public boolean driveExists;
-  public boolean robotEnabled;
+  //public boolean robotEnabled;
   //private boolean musicMode;
-  public NetworkTableEntry light;
+  //public NetworkTableEntry light;
   public Orchestra orchestra;
-  public NetworkTableEntry musicButton;
-  public boolean music;
+  //public NetworkTableEntry musicButton;
+  //public boolean music;
   public boolean musicMode;
   public String song;
   public NetworkTableEntry songSelection;
+  public String songPath;
+  public NetworkTableEntry encoderValue;
 
   //music mode is used to play .chrp files from the motors but is not necessary for the robot to work
   public Robot() {
@@ -69,15 +71,16 @@ public class Robot extends TimedRobot {
     //music = true;
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
+    orchestra = new Orchestra();
     gyro = new ADIS16448_IMU();
     pdp = new PowerDistributionPanel();
-    orchestra = new Orchestra();
     pdp.clearStickyFaults();
-    camera = CameraServer.getInstance().startAutomaticCapture();
-    DashHelper.getInstance().setUpCamera(camera);
-    DashHelper.getInstance().setUpPDPWidget(pdp);
-    DashHelper.getInstance().setUpGyroWidget(gyro);
-
+    if (!musicMode) {
+      camera = CameraServer.getInstance().startAutomaticCapture();
+      DashHelper.getInstance().setUpCamera(camera);
+      DashHelper.getInstance().setUpPDPWidget(pdp);
+      DashHelper.getInstance().setUpGyroWidget(gyro);
+    }
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
 
@@ -91,8 +94,6 @@ public class Robot extends TimedRobot {
     motorLeftBack = new WPI_TalonFX(3);
 
     System.out.println("Robot.Robot(): initialized all motors");
-
-    //to make music work, comment out drive
   }
 
 
@@ -101,22 +102,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    //works if it is set to true;, otherwise does not
-    //musicMode = music;
-    //System.out.println ("musicMode = " + musicMode);
-    //musicMode = true;
     if(musicMode){
+      DashHelper.getInstance().setPokemon();
       orchestra.loadMusic("StillAlive.chrp");
       orchestra.addInstrument(motorLeftBack);
       orchestra.addInstrument(motorLeftFront);
       orchestra.addInstrument(motorRightBack);
       orchestra.addInstrument(motorRightFront);
+      orchestra.stop();
       orchestra.play();
     } else {
       drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
       drive.m_right.setInverted(true);
       driveExists = true;
-      DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderValueLeftBack());
+      DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderInchesLeftBack());
     }
   }
 
@@ -126,8 +125,8 @@ public class Robot extends TimedRobot {
     if(!musicMode) {
       CommandScheduler.getInstance().run();
     }
-      SmartDashboard.updateValues();
-      Shuffleboard.update();
+    SmartDashboard.updateValues();
+    Shuffleboard.update();
       //musicButton.setBoolean(music);
   }
 
@@ -135,6 +134,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(!musicMode){
+      //encoderValue.setDouble(drive.getEncoderValueLeftBack());
       CommandScheduler.getInstance().cancelAll();
       CommandScheduler.getInstance().schedule(new GalacticSearchBRedCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
       //light.setBoolean(true);
@@ -144,7 +144,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-
+    /*if(!musicMode) {
+      encoderValue.setDouble(drive.getEncoderInchesLeftBack());
+    }*/
   }
 
 
@@ -160,7 +162,14 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    /*if(!musicMode){
+    encoderValue.setDouble(drive.getEncoderInchesLeftBack());
+    System.out.println(encoderValue + " value");
+    System.out.println(drive + " drive");
+    }*/
+    //encoderValue.setDouble(drive.getEncoderValueLeftBack());
+  }
 
 
   @Override

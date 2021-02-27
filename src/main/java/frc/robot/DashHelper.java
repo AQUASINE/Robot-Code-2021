@@ -32,6 +32,9 @@ public class DashHelper {
     public NetworkTableEntry light;
     public boolean musicMode;
     public NetworkTableEntry songSelection;
+    public boolean initialSongValue;
+    public NetworkTableEntry encoderValue;
+    public double encoderDistance;
 
     public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -43,12 +46,21 @@ public class DashHelper {
     }
 
     private void startDashboard(){
+        initialSongValue = false;
         musicButton = Shuffleboard.getTab("Main").addPersistent("Music Button", music).withWidget(BuiltInWidgets.kToggleButton).getEntry();
         System.out.println(musicButton.getBoolean(false) + " = dashboard music");
         //musicMode = musicButton.getBoolean(false);
 
+        if (musicButton.getBoolean(false ) == false) {
         maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
+
+        //when this is called, drive is null, so not working
+
+        /*encoderDistance = drive.getEncoderInchesLeftBack();
+        encoderValue = Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance).getEntry(); */
+        }
+
 
         //songSelection = Shuffleboard.getTab("Main").addPersistent("Song", "Megalovania").getEntry();
 
@@ -65,12 +77,14 @@ public class DashHelper {
         return musicMode;
     }
 
+
     public void setUpCamera(UsbCamera camera) {
         Shuffleboard.getTab("Main").add("Camera", camera).withWidget(BuiltInWidgets.kCameraStream);
     }
 
     public void setUpEncoderWidget(double encoderDistance) {
-        Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance).getEntry();
+        encoderValue = Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance)
+                .withWidget(BuiltInWidgets.kTextView).getEntry();
     }
 
     public void setUpGyroWidget(ADIS16448_IMU gyro) {
@@ -81,7 +95,15 @@ public class DashHelper {
         Shuffleboard.getTab("Main").add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel);
     }
 
-    public void setUpLightOn(){
+    public void setPokemon() {
+        Shuffleboard.getTab("Main").add("Pokemon", initialSongValue).withWidget(BuiltInWidgets.kToggleSwitch);
+    }
+
+    public void setStillAlive() {
+        Shuffleboard.getTab("Main").add("Still Alive", initialSongValue).withWidget(BuiltInWidgets.kToggleSwitch);
+    }
+
+  /*  public void setUpLightOn(){
         Shuffleboard.getTab("Main").add("Light", false);
     }
 

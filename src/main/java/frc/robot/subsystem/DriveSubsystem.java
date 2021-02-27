@@ -33,6 +33,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public boolean driveExists;
 
+  public double encoderDistance;
+
 
   public DriveSubsystem(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
