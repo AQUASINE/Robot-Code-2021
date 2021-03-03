@@ -21,6 +21,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DifferentialDrive differentialDrive;
 
+  public final static double BASE_WIDTH = 12.0; // TODO: Get an accurate width
+  public final static double WHEEL_DIAMETER = 6.0; // inches
+
   public DriveSubsystem(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
     WPI_TalonFX motorRightBack, WPI_TalonFX motorLeftBack, ADIS16448_IMU gyro

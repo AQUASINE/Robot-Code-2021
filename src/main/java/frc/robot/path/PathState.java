@@ -1,11 +1,13 @@
 package frc.robot.path;
 
+import java.nio.file.Path;
+
 public class PathState {
-    private double time;
-    private double velocity;
-    private double acceleration;
-    private PoseData pose;
-    private double curvature;
+    private final double time;
+    private final double velocity;
+    private final double acceleration;
+    private final PoseData pose;
+    private final double curvature;
 
     public PathState(double time, double velocity, double acceleration, PoseData pose, double curvature) {
         this.time = time;
@@ -14,6 +16,8 @@ public class PathState {
         this.pose = pose;
         this.curvature = curvature;
     }
+
+
 
     /**
      * @return double return the time
@@ -49,4 +53,5 @@ public class PathState {
     public double getCurvature() {
         return curvature;
     }
+
 }

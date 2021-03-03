@@ -1,5 +1,6 @@
 package frc.robot.command.auto;
 
+import frc.robot.command.auto.RotateConstantCommand;
 import frc.robot.subsystem.DriveSubsystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
