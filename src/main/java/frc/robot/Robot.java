@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     if(musicMode){
       DashHelper.getInstance().setPokemon();
-      orchestra.loadMusic("StillAlive.chrp");
+      orchestra.loadMusic("NyanCat.chrp");
       orchestra.addInstrument(motorLeftBack);
       orchestra.addInstrument(motorLeftFront);
       orchestra.addInstrument(motorRightBack);
