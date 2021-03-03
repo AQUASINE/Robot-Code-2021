@@ -3,8 +3,8 @@ package frc.robot.path;
 import java.util.HashMap;
 
 public class PoseData {
-    private HashMap<String, Double> translation;
-    private HashMap<String, Double> rotation;
+    private final HashMap<String, Double> translation;
+    private final HashMap<String, Double> rotation;
 
     public PoseData(HashMap<String, Double> translation, HashMap<String, Double> rotation) {
         this.translation = translation;

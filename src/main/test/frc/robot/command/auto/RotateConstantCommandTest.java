@@ -1,3 +1,4 @@
+package frc.robot.command.auto;
 
 import frc.robot.command.auto.RotateConstantCommand;
 import frc.robot.subsystem.DriveSubsystem;
