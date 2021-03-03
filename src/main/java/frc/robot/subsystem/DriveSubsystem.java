@@ -62,12 +62,24 @@ public class DriveSubsystem extends SubsystemBase {
     return motorLeftBack.getSelectedSensorPosition();
   }
 
+  public double getEncoderValueRightBack() {
+    return motorLeftBack.getSelectedSensorPosition();
+  }
+
   public double getEncoderInchesLeftBack() {
     final double wheelDiameter = 6;
     final double gearRatio = 10.71;
     final double unitsPerRevolution = 2048;
     return getEncoderValueLeftBack() / (gearRatio * unitsPerRevolution / (Math.PI * wheelDiameter));
   }
+
+  public double getEncoderInchesRightBack() {
+    final double wheelDiameter = 6;
+    final double gearRatio = 10.71;
+    final double unitsPerRevolution = 2048;
+    return getEncoderValueRightBack() / (gearRatio * unitsPerRevolution / (Math.PI * wheelDiameter));
+  }
+
   public void setRight(double num){
     m_right.set(num);
   }

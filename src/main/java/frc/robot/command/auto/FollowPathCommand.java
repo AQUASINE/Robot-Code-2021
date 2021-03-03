@@ -16,9 +16,14 @@ public class FollowPathCommand extends CommandBase {
     public double currentTime;
     private int NUM_PATH_STEPS;
 
-    private static final double kP = 0.005;
+    private double currPositionR;
+    private double prevPositionR;
+    private double currPositionL;
+    private double prevPositionL;
 
-    private static final double DT = 0.05;
+    private static final double kP = 0.001;
+
+    private static final double DT = 0.02;
 
     public FollowPathCommand(DriveSubsystem drive, PathDataModel path) {
         this.drive = drive;
@@ -28,6 +33,10 @@ public class FollowPathCommand extends CommandBase {
         NUM_PATH_STEPS = path == null ? 0 : path.getPathStates().length;
         System.out.println("NUM_PATH_STEPS == " + NUM_PATH_STEPS);
         addRequirements(drive);
+        prevPositionR = 0;
+        currPositionR = 0;
+        prevPositionL = 0;
+        currPositionL = 0;
     }
 
     @Override
@@ -58,8 +67,18 @@ public class FollowPathCommand extends CommandBase {
         double vel_r = vel + Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
         double vel_l = vel - Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
 
-        drive.setRight(kP * vel_r);
-        drive.setLeft(kP * vel_l);
+        prevPositionR = currPositionR;
+        currPositionR = drive.getEncoderInchesLeftBack();
+        prevPositionL = currPositionL;
+        currPositionL = drive.getEncoderInchesRightBack();
+    
+        double measuredVelocityL = (currPositionL-prevPositionL) / DT;
+        double measuredVelocityR = (currPositionR-prevPositionR) / DT;
+
+        System.out.println((vel_l - measuredVelocityL) + " " + (vel_r - measuredVelocityR));
+
+        drive.setRight(kP * (vel_r - measuredVelocityR));
+        drive.setLeft(kP * (vel_l - measuredVelocityL));
         currentTime += DT;
     }
 

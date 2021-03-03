@@ -93,12 +93,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-  
+  /*
     String filePath = new File("").getAbsolutePath();
     filePath = filePath.concat("\\src\\main\\test\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
-    //String filePath = "/usr/paths/CircuitPathFixture.wpilib.json";
+    */
+    /*String filePath = "/usr/paths/CircuitPathFixture.wpilib.json";
     PathDataModel pathDataModel = new PathDataModel(PathDataModel.readFromInputStream(filePath));
-    CommandScheduler.getInstance().schedule(new FollowPathCommand(drive, pathDataModel));
+    */
+    CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive));
   }
 
 
