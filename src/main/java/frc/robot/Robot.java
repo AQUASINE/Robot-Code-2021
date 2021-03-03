@@ -8,28 +8,30 @@
 package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.*;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
+import edu.wpi.first.wpilibj.util.Color;
+import java.util.ArrayList;
+import com.ctre.phoenix.music.Orchestra;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
 
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
-  //private double beginningPosition = 0;
 
-  //private double currentPosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - beginningPosition);
-
-  public DashHelper dash;
+  //public DashHelper dash;
 
   public WPI_TalonFX motorRightFront;
   public WPI_TalonFX motorLeftFront;
@@ -37,19 +39,48 @@ public class Robot extends TimedRobot {
   public WPI_TalonFX motorLeftBack;
 
   public ADIS16448_IMU gyro;
+  //public Encoder encoder;
+  public UsbCamera camera;
 
   public Joystick joystick;
 
+  //private ShuffleboardTab mainDash;
+
+  //public double robotSpeed;
+
+  public boolean driveExists;
+  //public boolean robotEnabled;
+  //private boolean musicMode;
+  //public NetworkTableEntry light;
+  public Orchestra orchestra;
+  //public NetworkTableEntry musicButton;
+  //public boolean music;
+  public boolean musicMode;
+  public String song;
+  public NetworkTableEntry songSelection;
+  public String songPath;
+  public NetworkTableEntry encoderValue;
+
+  //music mode is used to play .chrp files from the motors but is not necessary for the robot to work
   public Robot() {
+    DashHelper.getInstance();
+    musicMode = DashHelper.getInstance().getMusicMode();
+    //musicMode = musicButton.getBoolean(false);
+    //musicMode = true;
+
+    //music = true;
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
+    orchestra = new Orchestra();
+    gyro = new ADIS16448_IMU();
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
-    DashHelper.getInstance().setUpPDPWidget(pdp);
-    DashHelper.getInstance().setUpGyroWidget(gyro);
-    //DashHelper.getInstance().setEncoder(currentPosition);
-    //DashHelper.getInstance().
-
+    if (!musicMode) {
+      camera = CameraServer.getInstance().startAutomaticCapture();
+      DashHelper.getInstance().setUpCamera(camera);
+      DashHelper.getInstance().setUpPDPWidget(pdp);
+      DashHelper.getInstance().setUpGyroWidget(gyro);
+    }
     System.out.println("Robot.Robot(): initializing motorRightFront");
     motorRightFront = new WPI_TalonFX(0);
 
@@ -63,53 +94,88 @@ public class Robot extends TimedRobot {
     motorLeftBack = new WPI_TalonFX(3);
 
     System.out.println("Robot.Robot(): initialized all motors");
+  }
 
-    gyro = new ADIS16448_IMU();
 
-    drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
-    drive.m_right.setInverted(true);
-  } 
+
+
 
   @Override
   public void robotInit() {
-
-    dash = DashHelper.getInstance();
-    //gyro currently not working
-    //SmartDashboard.putData(gyro);
-    //Shuffleboard.getTab("Main").add((Sendable) gyro);
+    if(musicMode){
+      DashHelper.getInstance().setPokemon();
+      orchestra.loadMusic("StillAlive.chrp");
+      orchestra.addInstrument(motorLeftBack);
+      orchestra.addInstrument(motorLeftFront);
+      orchestra.addInstrument(motorRightBack);
+      orchestra.addInstrument(motorRightFront);
+      orchestra.stop();
+      orchestra.play();
+    } else {
+      drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+      drive.m_right.setInverted(true);
+      driveExists = true;
+      DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderInchesLeftBack());
+    }
   }
 
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    if(!musicMode) {
+      CommandScheduler.getInstance().run();
+    }
+    SmartDashboard.updateValues();
+    Shuffleboard.update();
+      //musicButton.setBoolean(music);
   }
 
 
   @Override
   public void autonomousInit() {
-    CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new GalacticSearchABlueCommandGroup(drive));
+    if(!musicMode){
+      //encoderValue.setDouble(drive.getEncoderValueLeftBack());
+      CommandScheduler.getInstance().cancelAll();
+      CommandScheduler.getInstance().schedule(new GalacticSearchBRedCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
+      //light.setBoolean(true);
+    }
   }
 
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    /*if(!musicMode) {
+      encoderValue.setDouble(drive.getEncoderInchesLeftBack());
+    }*/
+  }
 
 
   @Override
   public void teleopInit() {
-    CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+    if(!musicMode){
+      CommandScheduler.getInstance().cancelAll();
+      CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+
+      //light.setBoolean(true);
+    }
   }
 
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    /*if(!musicMode){
+    encoderValue.setDouble(drive.getEncoderInchesLeftBack());
+    System.out.println(encoderValue + " value");
+    System.out.println(drive + " drive");
+    }*/
+    //encoderValue.setDouble(drive.getEncoderValueLeftBack());
+  }
 
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    //light.setBoolean(false);
+  }
 
 
   @Override

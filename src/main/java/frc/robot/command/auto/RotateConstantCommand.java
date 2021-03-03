@@ -9,11 +9,13 @@ public class RotateConstantCommand extends CommandBase {
     private double targetAngle;
     private double relativeAngle;
     private double loopCounter = 0;
+    private double driveSpeed;
 
-    public RotateConstantCommand(double targetAngle, DriveSubsystem drive) {
+    public RotateConstantCommand(double targetAngle, DriveSubsystem drive, double robotSpeed) {
         this.drive = drive;
         this.targetAngle = targetAngle;
         addRequirements(drive);
+        driveSpeed = robotSpeed;
     }
 
 
@@ -27,11 +29,11 @@ public class RotateConstantCommand extends CommandBase {
         relativeAngle = drive.getGyroAngle() - startingAngle;
 
         if(targetAngle > 0){
-            drive.setRight(-.1);
-            drive.setLeft(.1);
+            drive.m_right.set(-driveSpeed);
+            drive.m_left.set(driveSpeed);
         } else {
-            drive.setRight(.1);
-            drive.setLeft(-.1);
+            drive.m_right.set(driveSpeed);
+            drive.m_left.set(-driveSpeed);
         }
 
         loopCounter++;
@@ -41,7 +43,7 @@ public class RotateConstantCommand extends CommandBase {
     public boolean isFinished() {
         System.out.println("RotateConstantCommand.isFinished(): Relative Angle: " + relativeAngle +
                 " Current Angle: " + drive.getGyroAngle());
-        return Math.abs(relativeAngle) >=Math.abs(targetAngle);
+        return Math.abs(relativeAngle) >= Math.abs(targetAngle);
 
     }
 }

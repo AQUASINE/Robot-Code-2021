@@ -1,119 +1,120 @@
 package frc.robot;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.cscore.VideoMode;
-import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystem.*;
-import frc.robot.Robot;
 
-
+import java.util.Map;
 
 public class DashHelper {
-    private ShuffleboardTab mainDash;
-    public static NetworkTableEntry sbSpeedTest;
-    public static NetworkTableEntry sbGyroWidget;
-    public static NetworkTableEntry sbEncoderDistance;
-    public static NetworkTableEntry sbRedValue, sbGreenValue, sbBlueValue;
-    public static NetworkTableEntry sbTimer;
-    public static NetworkTableEntry kP;
-    public static NetworkTableEntry kI;
-    public static NetworkTableEntry kD;
-    public static NetworkTableEntry sbServoOpen;
-    private static DashHelper dash;
+    public DriveSubsystem drive;
     public ADIS16448_IMU gyro;
+    public PowerDistributionPanel pdp;
+    public Encoder encoder;
+    public UsbCamera camera;
+    public double robotSpeed;
+    public boolean music;
+    private static frc.robot.DashHelper dash;
+    public NetworkTableEntry maxSpeed;
+    public NetworkTableEntry musicButton;
+    public WPI_TalonFX motorLeftBack;
+    public NetworkTableEntry light;
+    public boolean musicMode;
+    public NetworkTableEntry songSelection;
+    public boolean initialSongValue;
+    public NetworkTableEntry encoderValue;
+    public double encoderDistance;
 
-    public static DashHelper getInstance(){
+    public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
         if(dash == null){
-            dash = new DashHelper();
-            dash.startDash();
+            dash = new frc.robot.DashHelper();
+            dash.startDashboard();
         }
         return dash;
     }
 
-    private DashHelper(){
-        // Control the dashboard stuff to initialize only once
-    }
+    private void startDashboard(){
+        initialSongValue = false;
+        musicButton = Shuffleboard.getTab("Main").addPersistent("Music Button", music).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+        System.out.println(musicButton.getBoolean(false) + " = dashboard music");
+        //musicMode = musicButton.getBoolean(false);
 
-    private void startDash(){
-        mainDash = Shuffleboard.getTab("Main");
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
-        camera.setExposureAuto();
-        //SmartDashboard.putNumber("Encoder Distance", )
-        mainDash.add("Camera", camera);
+        if (musicButton.getBoolean(false ) == false) {
+        maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0, "max", 1)).getEntry();
+
+        //when this is called, drive is null, so not working
+
+        /*encoderDistance = drive.getEncoderInchesLeftBack();
+        encoderValue = Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance).getEntry(); */
+        }
 
 
+        //songSelection = Shuffleboard.getTab("Main").addPersistent("Song", "Megalovania").getEntry();
 
+        /*light = Shuffleboard.getTab("Main").add("Light", false)
+                .withWidget("Boolean Box")
+                .withProperties(Map.of("colorWhenTrue", "green", "colorWhenFalse", "red")).getEntry();*/
 
-
-
-
-        /*sbSpeedTest = mainDash.add("Speed", Constants.kSpeed).getEntry();
-        sbTimer = mainDash.add("Timer", 0).getEntry();
-        sbEncoderDistance = mainDash.add("Encoder", 0).getEntry();*/
-
-/*      sbRedValue = mainDash.add("Red Value", 0).getEntry();
-        sbGreenValue = mainDash.add("Green Value", 0).getEntry();
-        sbBlueValue = mainDash.add("Blue Value", 0).getEntry();
-*/
-        sbServoOpen = mainDash.add("Servo open", false).getEntry();
-
-        kP = mainDash.add("P", 0.015).getEntry();
-        kI = mainDash.add("I", 0).getEntry();
-        kD = mainDash.add("D", 0).getEntry();
-
-        //SmartDashboard.putNumber("")
-        Shuffleboard.selectTab("Main");
-        Shuffleboard.startRecording();
 
     }
 
-    public void setEncoder(double distance){
-        sbEncoderDistance.setDouble(distance);
+    public boolean getMusicMode() {
+        musicMode = musicButton.getBoolean(false);
+        System.out.println(musicMode);
+        return musicMode;
     }
 
-    //public void setUpEncoder()
 
-    public void setColor(Color color){
-        sbRedValue.setDouble(color.red);
-        sbGreenValue.setDouble(color.green);
-        sbBlueValue.setDouble(color.blue);
+    public void setUpCamera(UsbCamera camera) {
+        Shuffleboard.getTab("Main").add("Camera", camera).withWidget(BuiltInWidgets.kCameraStream);
     }
 
-    public void setUpGyroWidget(ADIS16448_IMU gyro){
-        mainDash.add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
-        //System.out.println("Tried to set up gyro");
+    public void setUpEncoderWidget(double encoderDistance) {
+        encoderValue = Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance)
+                .withWidget(BuiltInWidgets.kTextView).getEntry();
     }
 
-    /*public void setUpCamera(CameraServer camera){
-        mainDash.add("Camera", camera)
+    public void setUpGyroWidget(ADIS16448_IMU gyro) {
+        Shuffleboard.getTab("Main").add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
+    }
+
+    public void setUpPDPWidget(PowerDistributionPanel pdp) {
+        Shuffleboard.getTab("Main").add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel);
+    }
+
+    public void setPokemon() {
+        Shuffleboard.getTab("Main").add("Pokemon", initialSongValue).withWidget(BuiltInWidgets.kToggleSwitch);
+    }
+
+    public void setStillAlive() {
+        Shuffleboard.getTab("Main").add("Still Alive", initialSongValue).withWidget(BuiltInWidgets.kToggleSwitch);
+    }
+
+  /*  public void setUpLightOn(){
+        Shuffleboard.getTab("Main").add("Light", false);
+    }
+
+    public void setUpLightEnabled(){
+        Shuffleboard.getTab("Main").add("Light", true);
+    }
+
+    /*public void lightOn(Color color){
+        light.setDouble(color.red);
+    }
+    public void lightEnabled(Color color){
+        light.setDouble(color.green);
     }*/
-
-    //not using mecanum
-    /*public void setUpMechDriveWidget(MecanumDrive mechDrive){
-        mainDash.add("Mecanum Drive", mechDrive).withWidget(BuiltInWidgets.kMecanumDrive);
-    }*/
-    public void setUpPDPWidget(PowerDistributionPanel pdp){
-        mainDash.add("PDP", pdp).withWidget(BuiltInWidgets.kPowerDistributionPanel);
-        //System.out.println("Tried to set up pdp widget");
-    }
-
-    public void setTimer(Timer timer){
-        sbTimer.setDouble(timer.get());
-    }
-
 }

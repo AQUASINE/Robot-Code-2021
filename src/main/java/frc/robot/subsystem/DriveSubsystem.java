@@ -2,11 +2,19 @@ package frc.robot.subsystem;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DashHelper;
+
+import java.util.Map;
 
 public class DriveSubsystem extends SubsystemBase {
   private WPI_TalonFX motorRightFront;
@@ -21,9 +29,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DifferentialDrive differentialDrive;
 
+  public double robotSpeed;
+
+  public boolean driveExists;
+
+  public double encoderDistance;
+
   public final static double BASE_WIDTH = 12.0; // TODO: Get an accurate width
   public final static double WHEEL_DIAMETER = 6.0; // inches
-
+  
   public DriveSubsystem(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
     WPI_TalonFX motorRightBack, WPI_TalonFX motorLeftBack, ADIS16448_IMU gyro
@@ -40,6 +54,12 @@ public class DriveSubsystem extends SubsystemBase {
       differentialDrive = new DifferentialDrive(m_left, m_right);
   }
 
+ /* private ShuffleboardTab tab = Shuffleboard.getTab("Main");
+
+  private SimpleWidget distance.add("Encoder Distance", getEncoderValueLeftBack())
+                  .getEntry();*/
+
+
   public void setAllMotors(double value) {
     motorRightFront.set(value);
     motorLeftFront.set(-value);
@@ -53,6 +73,13 @@ public class DriveSubsystem extends SubsystemBase {
     motorRightBack.set(rb);
     motorLeftBack.set(-lb);
   }
+
+  //added for shuffleboard, not tested
+  public void setSpeed(double value) {
+    setAllMotors(value * robotSpeed);
+  }
+
+
 
   public double getGyroAngle() {
     return gyro.getAngle();

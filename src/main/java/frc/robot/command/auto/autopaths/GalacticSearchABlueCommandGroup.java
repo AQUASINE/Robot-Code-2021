@@ -8,17 +8,17 @@ import frc.robot.subsystem.DriveSubsystem;
 import java.sql.DriverPropertyInfo;
 
 public class GalacticSearchABlueCommandGroup extends SequentialCommandGroup {
-    public GalacticSearchABlueCommandGroup(DriveSubsystem drive) {
+    public GalacticSearchABlueCommandGroup(DriveSubsystem drive, double driveSpeed) {
         addCommands(
-                new DriveLengthConstantCommand(15 * 12, drive),
-                new RotateConstantCommand(-90, drive),
-                new DriveLengthConstantCommand(7.5*12, drive),
-                new RotateConstantCommand(90, drive),
-                new DriveLengthConstantCommand(7.5 * 12, drive),
-                new RotateConstantCommand(90, drive),
-                new DriveLengthConstantCommand(2.5 * 12, drive),
-                new RotateConstantCommand(-90, drive),
-                new DriveLengthConstantCommand(7.5 * 12, drive)
+                new DriveLengthConstantCommand(15 * 12, drive, driveSpeed),
+                new RotateConstantCommand(-90, drive, driveSpeed),
+                new DriveLengthConstantCommand(7.5*12, drive, driveSpeed),
+                new RotateConstantCommand(90, drive, driveSpeed),
+                new DriveLengthConstantCommand(7.5 * 12, drive, driveSpeed),
+                new RotateConstantCommand(90, drive, driveSpeed),
+                new DriveLengthConstantCommand(2.5 * 12, drive, driveSpeed),
+                new RotateConstantCommand(-90, drive, driveSpeed),
+                new DriveLengthConstantCommand(7.5 * 12, drive, driveSpeed)
         );
     }
 }
