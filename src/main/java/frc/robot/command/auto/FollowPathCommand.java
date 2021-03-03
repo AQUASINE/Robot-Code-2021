@@ -16,6 +16,8 @@ public class FollowPathCommand extends CommandBase {
     public double currentTime;
     private int NUM_PATH_STEPS;
 
+    private static final double kP = 0.005;
+
     private static final double DT = 0.05;
 
     public FollowPathCommand(DriveSubsystem drive, PathDataModel path) {
@@ -55,8 +57,8 @@ public class FollowPathCommand extends CommandBase {
         double vel_r = vel + Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
         double vel_l = vel - Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
 
-        drive.setRight(vel_r);
-        drive.setLeft(vel_l);
+        drive.setRight(kP * vel_r);
+        drive.setLeft(kP * vel_l);
         currentTime += DT;
     }
 
