@@ -41,7 +41,7 @@ public class RotateConstantCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if(loopCounter % 20 == 0) System.out.println("RotateConstantCommand.isFinished(): Relative Angle: " + relativeAngle +
+        System.out.println("RotateConstantCommand.isFinished(): Relative Angle: " + relativeAngle +
                 " Current Angle: " + drive.getGyroAngle());
         return Math.abs(relativeAngle) >= Math.abs(targetAngle);
 

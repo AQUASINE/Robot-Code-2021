@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="apibuilder">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="apibuilder" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/apibuilder.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/java/frc/pathfinder/output/CircuitPath.wpilib.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

@@ -35,7 +35,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double encoderDistance;
 
-
+  public final static double BASE_WIDTH = 12.0; // TODO: Get an accurate width
+  public final static double WHEEL_DIAMETER = 6.0; // inches
+  
   public DriveSubsystem(
     WPI_TalonFX motorRightFront, WPI_TalonFX motorLeftFront, 
     WPI_TalonFX motorRightBack, WPI_TalonFX motorLeftBack, ADIS16448_IMU gyro
@@ -93,4 +95,11 @@ public class DriveSubsystem extends SubsystemBase {
     final double unitsPerRevolution = 2048;
     return getEncoderValueLeftBack() / (gearRatio * unitsPerRevolution / (Math.PI * wheelDiameter));
   }
+  public void setRight(double num){
+    m_right.set(num);
+  }
+  public void setLeft(double num){
+    m_left.set(num);
+  }
 }
+
