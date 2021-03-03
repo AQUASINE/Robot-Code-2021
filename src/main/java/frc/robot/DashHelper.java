@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -50,11 +49,11 @@ public class DashHelper {
 
     private void startDash(){
         mainDash = Shuffleboard.getTab("Main");
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
-        camera.setExposureAuto();
+        //UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        //camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
+        //camera.setExposureAuto();
         //SmartDashboard.putNumber("Encoder Distance", )
-        mainDash.add("Camera", camera);
+        //mainDash.add("Camera", camera);
 
 
 

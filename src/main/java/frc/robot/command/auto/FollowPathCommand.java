@@ -16,14 +16,15 @@ public class FollowPathCommand extends CommandBase {
     public double currentTime;
     private int NUM_PATH_STEPS;
 
-    private static final double DT = 0.05;
+    private static final double DT = 0.02;
 
     public FollowPathCommand(DriveSubsystem drive, PathDataModel path) {
         this.drive = drive;
         this.path = path;
         currentStep = 0;
         currentTime = 0;
-        NUM_PATH_STEPS = path.getPathStates().length;
+        NUM_PATH_STEPS = path == null ? 0 : path.getPathStates().length;
+        System.out.println("NUM_PATH_STEPS == " + NUM_PATH_STEPS);
         addRequirements(drive);
     }
 
@@ -33,7 +34,7 @@ public class FollowPathCommand extends CommandBase {
     @Override
     public void execute() {
         PathState pathState = getStep(currentStep);
-        if(pathState.getTime() < currentTime) {
+        while(pathState.getTime() < currentTime) {
             currentStep++;
             if(currentStep >= NUM_PATH_STEPS) return;
             pathState = getStep(currentStep);
@@ -46,7 +47,7 @@ public class FollowPathCommand extends CommandBase {
 
              */
         }
-        double angleState = drive.getGyroAngle();
+        double angleState = currentStep == 0 ? 0 : getStep(currentStep - 1).getPose().getRotation().get("radians");//drive.getGyroAngle();
         double angleTarget = pathState.getPose().getRotation().get("radians");
         double angleError = angleTarget - angleState;
 
@@ -55,14 +56,14 @@ public class FollowPathCommand extends CommandBase {
         double vel_r = vel + Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
         double vel_l = vel - Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
 
-        drive.setRight(vel_r);
-        drive.setLeft(vel_l);
+        drive.setRight(vel_r / 200);
+        drive.setLeft(vel_l / 200);
         currentTime += DT;
     }
 
     @Override
     public boolean isFinished() {
-        return currentStep < NUM_PATH_STEPS;
+        return currentStep >= NUM_PATH_STEPS;
     }
 
     private PathState getStep(int num) {

@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.io.File;
+
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -17,8 +19,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.command.auto.FollowPathCommand;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
+import frc.robot.path.PathDataModel;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
 
@@ -45,8 +49,8 @@ public class Robot extends TimedRobot {
     // TODO: refactor port numbers into variables
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
-    DashHelper.getInstance().setUpPDPWidget(pdp);
-    DashHelper.getInstance().setUpGyroWidget(gyro);
+    //DashHelper.getInstance().setUpPDPWidget(pdp);
+    //DashHelper.getInstance().setUpGyroWidget(gyro);
     //DashHelper.getInstance().setEncoder(currentPosition);
     //DashHelper.getInstance().
 
@@ -73,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    dash = DashHelper.getInstance();
+    //dash = DashHelper.getInstance();
     //gyro currently not working
     //SmartDashboard.putData(gyro);
     //Shuffleboard.getTab("Main").add((Sendable) gyro);
@@ -89,7 +93,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new GalacticSearchABlueCommandGroup(drive));
+  
+    String filePath = new File("").getAbsolutePath();
+    filePath = filePath.concat("\\src\\main\\test\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
+    //String filePath = "/usr/paths/CircuitPathFixture.wpilib.json";
+    PathDataModel pathDataModel = new PathDataModel(PathDataModel.readFromInputStream(filePath));
+    CommandScheduler.getInstance().schedule(new FollowPathCommand(drive, pathDataModel));
   }
 
 
