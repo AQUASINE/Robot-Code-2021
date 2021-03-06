@@ -32,7 +32,12 @@ public class TeleopDriveCommand extends CommandBase {
         z = joystick.getZ();
 
 
+        drive.differentialDrive.arcadeDrive(z, y);
+        //drive.differentialDrive.arcadeDrive(y, robotTurnSpeed);
+    }
 
-        drive.differentialDrive.arcadeDrive(y, robotTurnSpeed);
+    @Override
+    public void end(boolean interrupted) {
+
     }
 }

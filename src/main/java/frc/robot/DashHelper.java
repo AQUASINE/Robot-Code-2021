@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+//import frc.robot.command.music.MusicCommand;
 import frc.robot.subsystem.*;
 import java.util.Map;
+import com.ctre.phoenix.music.Orchestra;
 
 public class DashHelper {
     public DriveSubsystem drive;
@@ -36,6 +39,11 @@ public class DashHelper {
     public boolean initialSongValue;
     public NetworkTableEntry encoderValue;
     public double encoderDistance;
+    public Orchestra orchestra;
+    public String songToPlay;
+    public SendableChooser selectSong;
+    public ComplexWidget songChooser;
+
 
     public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -47,15 +55,31 @@ public class DashHelper {
     }
 
     private void startDashboard(){
+
         initialSongValue = false;
         musicButton = Shuffleboard.getTab("Main").addPersistent("Music Button", music).withWidget(BuiltInWidgets.kToggleButton).getEntry();
         System.out.println(musicButton.getBoolean(false) + " = dashboard music");
 
+        if (musicButton.getBoolean(false )) {
+            selectSong = new SendableChooser<>();
+            selectSong.addOption("Splatoon Theme", "Splatoon theme");
+            selectSong.addOption("Still Alive", "StillAlive");
+            selectSong.addOption("Wii Sports", "WiiSports");
+            selectSong.addOption("Hopes And Dreams", "HopesAndDreams");
+            selectSong.addOption("Monty On The Run", "MontyOnTheRun");
+            selectSong.addOption("Nyan Cat", "NyanCat");
+            selectSong.addOption("Still Alive (Piano)", "StillAlivePiano" );
+            selectSong.addOption("Bad Apple", "BadApple");
+            selectSong.addOption("Coconut Mall", "CoconutMall");
+            songChooser = Shuffleboard.getTab("Main").add("Select Song", selectSong).withSize(8, 1).withPosition(0, 1).withWidget(BuiltInWidgets.kSplitButtonChooser);
+            selectSong.getSelected();
+            //musicCommand = Shuffleboard.getTab("Main").add("Music Command", MusicCommand(orchestra, songToPlay)).withWidget(BuiltInWidgets.kCommand).
+        }
         if (!musicButton.getBoolean(false )) {
-        maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
+            maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
 
-        robotTurnSpeed = Shuffleboard.getTab("Main").addPersistent("Turn Speed", turnSpeed).withWidget(BuiltInWidgets.kNumberSlider)
+            robotTurnSpeed = Shuffleboard.getTab("Main").addPersistent("Turn Speed", turnSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
 
         //when this is called, drive is null, so not working
@@ -72,6 +96,12 @@ public class DashHelper {
                 .withProperties(Map.of("colorWhenTrue", "green", "colorWhenFalse", "red")).getEntry();*/
 
 
+    }
+
+    public void setUpNyanCat(Orchestra orchestraName) {
+        orchestraName.stop();
+        orchestraName.loadMusic("NyanCat.chrp");
+        orchestraName.play();
     }
 
     public boolean getMusicMode() {
@@ -99,7 +129,7 @@ public class DashHelper {
     }
 
     public void setPokemon() {
-        Shuffleboard.getTab("Main").add("Pokemon", initialSongValue).withWidget(BuiltInWidgets.kToggleSwitch);
+
     }
 
     public void setStillAlive() {

@@ -14,8 +14,10 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.MotorSafety;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -26,10 +28,13 @@ import java.util.ArrayList;
 import com.ctre.phoenix.music.Orchestra;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
+import frc.robot.command.music.MusicCommand;
 
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
+  private TeleopDriveCommand teleopdrive;
   public PowerDistributionPanel pdp;
+  private BarrelRacingPathCommandGroup barrelracingpathcommandgroup;
 
   //public DashHelper dash;
 
@@ -68,6 +73,8 @@ public class Robot extends TimedRobot {
     //musicMode = musicButton.getBoolean(false);
     //musicMode = true;
 
+    //drive.differentialDrive.setSafetyEnabled(false);
+
     //music = true;
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
@@ -103,16 +110,18 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     if(musicMode){
-      DashHelper.getInstance().setPokemon();
-      orchestra.loadMusic("NyanCat.chrp");
+      //DashHelper.getInstance().setPokemon();
       orchestra.addInstrument(motorLeftBack);
       orchestra.addInstrument(motorLeftFront);
       orchestra.addInstrument(motorRightBack);
       orchestra.addInstrument(motorRightFront);
       orchestra.stop();
+      orchestra.loadMusic("NyanCat.chrp");
       orchestra.play();
     } else {
       drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+      teleopdrive = new TeleopDriveCommand(drive, joystick, DashHelper.getInstance().robotTurnSpeed.getDouble(0.5), DashHelper.getInstance().maxSpeed.getDouble(0.5));
+      barrelracingpathcommandgroup = new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5));
       drive.m_right.setInverted(true);
       driveExists = true;
       DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderInchesLeftBack());
@@ -127,6 +136,7 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.updateValues();
     Shuffleboard.update();
+
       //musicButton.setBoolean(music);
   }
 
@@ -136,8 +146,9 @@ public class Robot extends TimedRobot {
     if(!musicMode){
       //encoderValue.setDouble(drive.getEncoderValueLeftBack());
       CommandScheduler.getInstance().cancelAll();
-      CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5)));
-      //light.setBoolean(true);
+      CommandScheduler.getInstance().setDefaultCommand(drive, barrelracingpathcommandgroup);
+      /*CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5)));
+      //light.setBoolean(true);*/
     }
   }
 
@@ -154,9 +165,10 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(!musicMode){
       CommandScheduler.getInstance().cancelAll();
-      CommandScheduler.getInstance().schedule(new TeleopDriveCommand
+      CommandScheduler.getInstance().setDefaultCommand(drive, teleopdrive);
+      /*CommandScheduler.getInstance().schedule(new TeleopDriveCommand
               (drive, joystick, DashHelper.getInstance().robotTurnSpeed.getDouble(0.5), DashHelper.getInstance().maxSpeed.getDouble(0.5)));
-
+      */
       //light.setBoolean(true);
     }
   }
@@ -164,6 +176,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    if(musicMode) {
+      new MusicCommand(orchestra, DashHelper.getInstance().selectSong.getSelected().toString());
+    }
+
     /*if(!musicMode){
     encoderValue.setDouble(drive.getEncoderInchesLeftBack());
     System.out.println(encoderValue + " value");

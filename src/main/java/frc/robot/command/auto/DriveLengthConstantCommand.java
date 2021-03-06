@@ -1,6 +1,7 @@
 package frc.robot.command.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.command.auto.autopaths.BarrelRacingPathCommandGroup;
 import frc.robot.subsystem.DriveSubsystem;
 
 public class DriveLengthConstantCommand extends CommandBase {
@@ -31,8 +32,9 @@ public class DriveLengthConstantCommand extends CommandBase {
     @Override
     public void execute() {
         relativePosition = Math.abs(drive.getEncoderValueLeftBack() - startingPosition);
-        drive.m_left.set(-direction * driveSpeed);
-        drive.m_right.set(-direction * driveSpeed);
+        //drive.m_left.set(-direction * driveSpeed);
+        //drive.m_right.set(-direction * driveSpeed);
+        drive.differentialDrive.tankDrive(-direction * driveSpeed, -direction * driveSpeed);
     }
 
     @Override
@@ -40,5 +42,10 @@ public class DriveLengthConstantCommand extends CommandBase {
         if(loopCount++ % 20 == 0) System.out.println("DriveLengthConstantCommand.isFinished(): Relative Position: "
                 + relativePosition + ", TargetPosition: " + targetPosition);
         return Math.abs(relativePosition) >= Math.abs(targetPosition);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drive.differentialDrive.tankDrive(0,0);
     }
 }
