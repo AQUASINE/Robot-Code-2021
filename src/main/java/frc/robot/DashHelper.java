@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystem.*;
-
 import java.util.Map;
 
 public class DashHelper {
@@ -24,9 +23,11 @@ public class DashHelper {
     public Encoder encoder;
     public UsbCamera camera;
     public double robotSpeed;
+    public double turnSpeed;
     public boolean music;
     private static frc.robot.DashHelper dash;
     public NetworkTableEntry maxSpeed;
+    public NetworkTableEntry robotTurnSpeed;
     public NetworkTableEntry musicButton;
     public WPI_TalonFX motorLeftBack;
     public NetworkTableEntry light;
@@ -49,10 +50,12 @@ public class DashHelper {
         initialSongValue = false;
         musicButton = Shuffleboard.getTab("Main").addPersistent("Music Button", music).withWidget(BuiltInWidgets.kToggleButton).getEntry();
         System.out.println(musicButton.getBoolean(false) + " = dashboard music");
-        //musicMode = musicButton.getBoolean(false);
 
-        if (musicButton.getBoolean(false ) == false) {
+        if (!musicButton.getBoolean(false )) {
         maxSpeed = Shuffleboard.getTab("Main").addPersistent("Robot Speed", robotSpeed).withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0, "max", 1)).getEntry();
+
+        robotTurnSpeed = Shuffleboard.getTab("Main").addPersistent("Turn Speed", turnSpeed).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0, "max", 1)).getEntry();
 
         //when this is called, drive is null, so not working

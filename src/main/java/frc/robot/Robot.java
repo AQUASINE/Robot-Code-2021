@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
     if(!musicMode){
       //encoderValue.setDouble(drive.getEncoderValueLeftBack());
       CommandScheduler.getInstance().cancelAll();
-      CommandScheduler.getInstance().schedule(new GalacticSearchBRedCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(1.0)));
+      CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5)));
       //light.setBoolean(true);
     }
   }
@@ -154,7 +154,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(!musicMode){
       CommandScheduler.getInstance().cancelAll();
-      CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+      CommandScheduler.getInstance().schedule(new TeleopDriveCommand
+              (drive, joystick, DashHelper.getInstance().robotTurnSpeed.getDouble(0.5), DashHelper.getInstance().maxSpeed.getDouble(0.5)));
 
       //light.setBoolean(true);
     }
