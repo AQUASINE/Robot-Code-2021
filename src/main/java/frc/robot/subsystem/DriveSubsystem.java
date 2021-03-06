@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import static frc.robot.Constants.*; 
+
 public class DriveSubsystem extends SubsystemBase {
   private WPI_TalonFX motorRightFront;
   private WPI_TalonFX motorLeftFront;
@@ -21,6 +23,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DifferentialDrive differentialDrive;
 
+  private double adjustedAngle;
+
   public final static double BASE_WIDTH = 22.75;
   public final static double WHEEL_DIAMETER = 6.0; // inches
 
@@ -33,6 +37,8 @@ public class DriveSubsystem extends SubsystemBase {
       this.motorRightBack = motorRightBack;
       this.motorLeftBack = motorLeftBack;
       this.gyro = gyro;
+
+      adjustedAngle = 0;
 
       m_left = new SpeedControllerGroup(motorLeftBack, motorLeftFront);
       m_right = new SpeedControllerGroup(motorRightBack, motorRightFront);
@@ -54,8 +60,12 @@ public class DriveSubsystem extends SubsystemBase {
     motorLeftBack.set(-lb);
   }
 
+  public void resetGyroAngle() {
+    adjustedAngle = 0;
+  }
+
   public double getGyroAngle() {
-    return gyro.getAngle();
+    return adjustedAngle;
   }
 
   public double getEncoderValueLeftBack() {
@@ -85,6 +95,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
   public void setLeft(double num){
     m_left.set(num);
+  }
+
+  @Override
+  public void periodic() {
+    if(Math.abs(gyro.getRate()) >= GYRO_DEAD_ZONE) {
+      adjustedAngle += gyro.getRate() * DT;
+    }
   }
 }
 
