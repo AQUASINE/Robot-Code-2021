@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-
+    drive.differentialDrive.setSafetyEnabled(false);
     //dash = DashHelper.getInstance();
     //gyro currently not working
     //SmartDashboard.putData(gyro);
