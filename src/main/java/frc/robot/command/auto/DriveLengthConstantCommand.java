@@ -5,35 +5,51 @@ import frc.robot.subsystem.DriveSubsystem;
 
 public class DriveLengthConstantCommand extends CommandBase {
     private DriveSubsystem drive;
-    private double startingPosition = 0;
-    private int loopCount;
+    private double startingPositionL = 0;
+    private double startingPositionR = 0;
     private int direction;
-    private double relativePosition;
-    private double targetPosition;
+    private double relativePositionL;
+    private double relativePositionR;
+    private double targetPositionL;
+    private double targetPositionR;
 
     public DriveLengthConstantCommand(double inches, DriveSubsystem drive) {
         this.drive = drive;
-        targetPosition = inches;
+        targetPositionL = inches;
         direction = (int) Math.signum(inches);
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
-        startingPosition = drive.getEncoderInchesLeftBack();
+        startingPositionL = drive.getEncoderInchesLeftBack();
+        startingPositionR = drive.getEncoderInchesRightBack();
     }
 
     @Override
     public void execute() {
-        relativePosition = Math.abs(drive.getEncoderInchesLeftBack() - startingPosition);
-        drive.m_left.set(direction * .15);
-        drive.m_right.set(direction * .15);
+        relativePositionL = Math.abs(drive.getEncoderInchesLeftBack() - startingPositionL);
+        relativePositionR = Math.abs(drive.getEncoderInchesRightBack() - startingPositionR);
+        drive.setLeft(isLeftFinished() ? 0 : direction * .15);
+        drive.setRight(isRightFinished() ? 0 : direction * .15);
+    }
+
+    public boolean isLeftFinished() {
+        return Math.abs(relativePositionL) >= Math.abs(targetPositionL);
+    }
+
+    public boolean isRightFinished() {
+        return Math.abs(relativePositionR) >= Math.abs(targetPositionR);
     }
 
     @Override
     public boolean isFinished() {
-        if(loopCount++ % 20 == 0) System.out.println("DriveLengthConstantCommand.isFinished(): Relative Position: "
-                + relativePosition + ", TargetPosition: " + targetPosition);
-        return Math.abs(relativePosition) >= Math.abs(targetPosition);
+        return isLeftFinished() && isRightFinished();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drive.setLeft(0);
+        drive.setRight(0);
     }
 }

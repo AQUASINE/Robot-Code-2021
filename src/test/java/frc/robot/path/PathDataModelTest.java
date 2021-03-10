@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import frc.robot.path.PathDataModel;
+
 import java.io.*;
 
 import static frc.robot.path.PathDataModel.readFromInputStream;
@@ -21,7 +23,7 @@ public class PathDataModelTest {
     @BeforeEach
     public void setUp() {
         String filePath = new File("").getAbsolutePath();
-        filePath = filePath.concat("\\src\\main\\test\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
+        filePath = filePath.concat("\\src\\test\\java\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
         json = readFromInputStream(filePath);
         model = new PathDataModel(json);
     }

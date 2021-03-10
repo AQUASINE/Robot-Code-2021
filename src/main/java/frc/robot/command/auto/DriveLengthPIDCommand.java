@@ -36,7 +36,6 @@ public class DriveLengthPIDCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if(loopCount++ % 20 == 0) System.out.println("Relative Position: " + relativePosition);
         return relativePosition >= targetPosition;
     }
 }

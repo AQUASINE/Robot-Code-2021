@@ -20,11 +20,14 @@ public class FollowPathCommandTest {
     private FollowPathCommand command;
     private DriveSubsystem mockDriveSubsystem;
 
+    public FollowPathCommandTest() {}
+
     @BeforeEach
     public void setUp() {
         mockDriveSubsystem = mock(DriveSubsystem.class);
         String filePath = new File("").getAbsolutePath();
-        filePath = filePath.concat("\\src\\main\\test\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
+        filePath = filePath.concat("\\src\\test\\java\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
+        System.out.println("FollowPathCommandTest.setUp(): filePath -> " + filePath);
         pathDataModel = new PathDataModel(PathDataModel.readFromInputStream(filePath));
         command = new FollowPathCommand(mockDriveSubsystem, pathDataModel);
     }
