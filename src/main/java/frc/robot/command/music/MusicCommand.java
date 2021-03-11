@@ -8,11 +8,12 @@ public class MusicCommand extends CommandBase {
     private String songToPlay;
     private String currentSong = "";
     private boolean isStopped = false;
-    private boolean canPlay = true;
+    private boolean canPlay = false;
 
     public MusicCommand(Orchestra robotOrchestra, String songName) {
         orchestra = robotOrchestra;
-        songToPlay = songName + ".chrp";
+        songToPlay = songName;
+
         if(currentSong.equals(songName)){
             canPlay = false;
         } else {

@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   private TeleopDriveCommand teleopdrive;
   public PowerDistributionPanel pdp;
   private BarrelRacingPathCommandGroup barrelracingpathcommandgroup;
+  private MusicCommand musicCommand;
 
   //public DashHelper dash;
 
@@ -55,12 +56,11 @@ public class Robot extends TimedRobot {
 
   public boolean driveExists;
   //public boolean robotEnabled;
-  //private boolean musicMode;
+  public boolean musicMode;
   //public NetworkTableEntry light;
   public Orchestra orchestra;
   //public NetworkTableEntry musicButton;
   //public boolean music;
-  public boolean musicMode;
   public String song;
   public NetworkTableEntry songSelection;
   public String songPath;
@@ -79,6 +79,14 @@ public class Robot extends TimedRobot {
     joystick = new Joystick(0);
     // TODO: refactor port numbers into variables
     orchestra = new Orchestra();
+    String[] songList = new String[] {
+            "CoconutMall.chrp",
+            "BadApple.chrp",
+            "digdug.chrp",
+            "HopesAndDreams.chrp",
+            "NyanCat.chrp",
+            "StillAlivePiano.chrp"
+    };
     gyro = new ADIS16448_IMU();
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
@@ -101,30 +109,39 @@ public class Robot extends TimedRobot {
     motorLeftBack = new WPI_TalonFX(3);
 
     System.out.println("Robot.Robot(): initialized all motors");
+
   }
 
-
-
+  int getButton() {
+    for(int i = 7; i < 13; ++i) {
+      if (joystick.getRawButton(i)) {
+        return i;
+      }
+    }
+    return 0;
+  }
 
 
   @Override
   public void robotInit() {
     if(musicMode){
       //DashHelper.getInstance().setPokemon();
-      orchestra.addInstrument(motorLeftBack);
+      /*orchestra.addInstrument(motorLeftBack);
       orchestra.addInstrument(motorLeftFront);
       orchestra.addInstrument(motorRightBack);
       orchestra.addInstrument(motorRightFront);
       orchestra.stop();
       orchestra.loadMusic("NyanCat.chrp");
-      orchestra.play();
+      orchestra.play();*/
     } else {
       drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
       teleopdrive = new TeleopDriveCommand(drive, joystick, DashHelper.getInstance().robotTurnSpeed.getDouble(0.5), DashHelper.getInstance().maxSpeed.getDouble(0.5));
       barrelracingpathcommandgroup = new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5));
+      //musicCommand = new MusicCommand(orchestra, DashHelper.getInstance().selectSong.getSelected().toString());
+
       drive.m_right.setInverted(true);
       driveExists = true;
-      DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderInchesLeftBack());
+      //DashHelper.getInstance().setUpEncoderWidget(drive.getEncoderInchesLeftBack());
     }
   }
 
@@ -147,8 +164,8 @@ public class Robot extends TimedRobot {
       //encoderValue.setDouble(drive.getEncoderValueLeftBack());
       CommandScheduler.getInstance().cancelAll();
       CommandScheduler.getInstance().setDefaultCommand(drive, barrelracingpathcommandgroup);
-      /*CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5)));
-      //light.setBoolean(true);*/
+      CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive, DashHelper.getInstance().maxSpeed.getDouble(0.5)));
+      //light.setBoolean(true);
     }
   }
 
@@ -166,9 +183,9 @@ public class Robot extends TimedRobot {
     if(!musicMode){
       CommandScheduler.getInstance().cancelAll();
       CommandScheduler.getInstance().setDefaultCommand(drive, teleopdrive);
-      /*CommandScheduler.getInstance().schedule(new TeleopDriveCommand
+      CommandScheduler.getInstance().schedule(new TeleopDriveCommand
               (drive, joystick, DashHelper.getInstance().robotTurnSpeed.getDouble(0.5), DashHelper.getInstance().maxSpeed.getDouble(0.5)));
-      */
+
       //light.setBoolean(true);
     }
   }
@@ -177,9 +194,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if(musicMode) {
-      new MusicCommand(orchestra, DashHelper.getInstance().selectSong.getSelected().toString());
+      //CommandScheduler.getInstance().cancelAll();
+      //CommandScheduler.getInstance().schedule(new MusicCommand(orchestra, DashHelper.getInstance().selectSong.getSelected()));
     }
-
     /*if(!musicMode){
     encoderValue.setDouble(drive.getEncoderInchesLeftBack());
     System.out.println(encoderValue + " value");

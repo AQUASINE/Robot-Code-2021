@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-//import frc.robot.command.music.MusicCommand;
+import frc.robot.command.music.MusicCommand;
 import frc.robot.subsystem.*;
 import java.util.Map;
 import com.ctre.phoenix.music.Orchestra;
@@ -43,7 +43,7 @@ public class DashHelper {
     public String songToPlay;
     public SendableChooser selectSong;
     public ComplexWidget songChooser;
-
+    public MusicCommand musicCommand;
 
     public static frc.robot.DashHelper getInstance(){
         // DashHelper is a singleton, only one object can exist
@@ -58,21 +58,22 @@ public class DashHelper {
 
         initialSongValue = false;
         musicButton = Shuffleboard.getTab("Main").addPersistent("Music Button", music).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-        System.out.println(musicButton.getBoolean(false) + " = dashboard music");
 
         if (musicButton.getBoolean(false )) {
-            selectSong = new SendableChooser<>();
+            SongWidgetSetup();
+
+            /*selectSong = new SendableChooser<>();
             selectSong.addOption("Splatoon Theme", "Splatoon theme");
             selectSong.addOption("Still Alive", "StillAlive");
             selectSong.addOption("Wii Sports", "WiiSports");
             selectSong.addOption("Hopes And Dreams", "HopesAndDreams");
             selectSong.addOption("Monty On The Run", "MontyOnTheRun");
             selectSong.addOption("Nyan Cat", "NyanCat");
-            selectSong.addOption("Still Alive (Piano)", "StillAlivePiano" );
+            selectSong.addOption("Still Alive (Piano)", "SillAlivePiano" );
             selectSong.addOption("Bad Apple", "BadApple");
             selectSong.addOption("Coconut Mall", "CoconutMall");
             songChooser = Shuffleboard.getTab("Main").add("Select Song", selectSong).withSize(8, 1).withPosition(0, 1).withWidget(BuiltInWidgets.kSplitButtonChooser);
-            selectSong.getSelected();
+            selectSong.getSelected();*/
             //musicCommand = Shuffleboard.getTab("Main").add("Music Command", MusicCommand(orchestra, songToPlay)).withWidget(BuiltInWidgets.kCommand).
         }
         if (!musicButton.getBoolean(false )) {
@@ -115,10 +116,10 @@ public class DashHelper {
         Shuffleboard.getTab("Main").add("Camera", camera).withWidget(BuiltInWidgets.kCameraStream);
     }
 
-    public void setUpEncoderWidget(double encoderDistance) {
+    /*public void setUpEncoderWidget(double encoderDistance) {
         encoderValue = Shuffleboard.getTab("Main").add("Encoder Distance", encoderDistance)
                 .withWidget(BuiltInWidgets.kTextView).getEntry();
-    }
+    }*/
 
     public void setUpGyroWidget(ADIS16448_IMU gyro) {
         Shuffleboard.getTab("Main").add("Gyro", gyro).withWidget(BuiltInWidgets.kGyro);
@@ -150,4 +151,8 @@ public class DashHelper {
     public void lightEnabled(Color color){
         light.setDouble(color.green);
     }*/
+
+    private void SongWidgetSetup () {
+        Shuffleboard.getTab("Main").add("Song Command", musicCommand).withWidget(BuiltInWidgets.kCommand);
+    }
 }
