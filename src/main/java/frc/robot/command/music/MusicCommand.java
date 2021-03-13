@@ -1,6 +1,6 @@
-package frc.robot.command.music;
+//package frc.robot.command.music;
 
-import com.ctre.phoenix.music.Orchestra;
+/*import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class MusicCommand extends CommandBase {
@@ -40,4 +40,4 @@ public class MusicCommand extends CommandBase {
     public boolean isFinished() {
         return isStopped;
     }
-}
+}*/
