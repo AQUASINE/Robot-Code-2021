@@ -23,7 +23,7 @@ public class FollowPathCommand extends CommandBase {
 
     private static final double kP = 0.001;
 
-    private static final double DT = 0.02;
+    public static final double DT = 0.02;
 
     public FollowPathCommand(DriveSubsystem drive, PathDataModel path) {
         this.drive = drive;
@@ -31,7 +31,7 @@ public class FollowPathCommand extends CommandBase {
         currentStep = 0;
         currentTime = 0;
         NUM_PATH_STEPS = path == null ? 0 : path.getPathStates().length;
-        System.out.println("NUM_PATH_STEPS == " + NUM_PATH_STEPS);
+        System.out.println("FollowPathCommand(): NUM_PATH_STEPS == " + NUM_PATH_STEPS);
         addRequirements(drive);
         prevPositionR = 0;
         currPositionR = 0;
@@ -75,10 +75,8 @@ public class FollowPathCommand extends CommandBase {
         double measuredVelocityL = (currPositionL-prevPositionL) / DT;
         double measuredVelocityR = (currPositionR-prevPositionR) / DT;
 
-        System.out.println((vel_l - measuredVelocityL) + " " + (vel_r - measuredVelocityR));
-
-        drive.setRight(kP * (vel_r - measuredVelocityR));
-        drive.setLeft(kP * (vel_l - measuredVelocityL));
+        drive.differentialDrive.tankDrive(kP * (vel_l - measuredVelocityL), kP * (vel_r - measuredVelocityR));
+        System.out.println("FollowPathCommand.execute(): time=>" + currentTime + "; v_l:" + vel_l);
         currentTime += DT;
     }
 
@@ -87,7 +85,7 @@ public class FollowPathCommand extends CommandBase {
         return currentStep >= NUM_PATH_STEPS;
     }
 
-    private PathState getStep(int num) {
+    public PathState getStep(int num) {
         return path.getPathStates()[num];
     }
 
@@ -128,4 +126,11 @@ public class FollowPathCommand extends CommandBase {
         return num1 + (num2 - num1) * timeScalar;
     }
 
+    public double getCurrentTime() {
+        return currentTime;
+    }
+
+    public PathDataModel getPath() {
+        return path;
+    }
 }

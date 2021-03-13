@@ -44,6 +44,11 @@ public class DriveSubsystem extends SubsystemBase {
       m_right = new SpeedControllerGroup(motorRightBack, motorRightFront);
 
       differentialDrive = new DifferentialDrive(m_left, m_right);
+      motorRightFront.setSafetyEnabled(false);
+      motorLeftFront.setSafetyEnabled(false);
+      motorRightBack.setSafetyEnabled(false);
+      motorLeftBack.setSafetyEnabled(false);
+
   }
 
   public void setAllMotors(double value) {

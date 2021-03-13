@@ -48,12 +48,14 @@ public class DashHelper {
     }
 
     private void startDash(){
+        /*
         mainDash = Shuffleboard.getTab("Main");
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 800, 600, 20 );
         camera.setExposureAuto();
         //SmartDashboard.putNumber("Encoder Distance", )
         mainDash.add("Camera", camera);
+        */
 
 
 

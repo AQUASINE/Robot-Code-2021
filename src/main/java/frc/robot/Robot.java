@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.command.IdleCommand;
 import frc.robot.command.auto.FollowPathCommand;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
@@ -29,7 +31,7 @@ import frc.robot.DashHelper;
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
   public PowerDistributionPanel pdp;
-  public I2C i2c;
+  //public I2C i2c;
   //private double beginningPosition = 0;
 
   //private double currentPosition = Math.abs(drive.motorLeftBack.getSelectedSensorPosition() - beginningPosition);
@@ -94,14 +96,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-  /*
+
     String filePath = new File("").getAbsolutePath();
-    filePath = filePath.concat("\\src\\main\\test\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
-    */
-    /*String filePath = "/usr/paths/CircuitPathFixture.wpilib.json";
+    filePath = filePath.concat("\\src\\test\\java\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
+    
+    //String filePath = "/usr/paths/CircuitPathFixture.wpilib.json";
     PathDataModel pathDataModel = new PathDataModel(PathDataModel.readFromInputStream(filePath));
-    */
-    CommandScheduler.getInstance().schedule(new BarrelRacingPathCommandGroup(drive));
+    
+    CommandScheduler.getInstance().schedule(new FollowPathCommand(drive, pathDataModel));
+    CommandScheduler.getInstance().setDefaultCommand(drive, new IdleCommand(drive));
   }
 
 
