@@ -3,9 +3,13 @@ package frc.robot.subsystem;
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.*; 
@@ -22,6 +26,8 @@ public class DriveSubsystem extends SubsystemBase {
   public SpeedController m_right;
 
   public DifferentialDrive differentialDrive;
+  
+  private DifferentialDriveOdometry differentialDriveOdometry;
 
   private double adjustedAngle;
 
@@ -48,6 +54,8 @@ public class DriveSubsystem extends SubsystemBase {
       motorLeftFront.setSafetyEnabled(false);
       motorRightBack.setSafetyEnabled(false);
       motorLeftBack.setSafetyEnabled(false);
+
+      differentialDriveOdometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
   }
 
@@ -78,8 +86,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getEncoderValueRightBack() {
-    return motorLeftBack.getSelectedSensorPosition();
+    return motorRightBack.getSelectedSensorPosition();
   }
+
 
   public double getEncoderInchesLeftBack() {
     final double wheelDiameter = 6;
@@ -95,6 +104,14 @@ public class DriveSubsystem extends SubsystemBase {
     return getEncoderValueRightBack() / (gearRatio * unitsPerRevolution / (Math.PI * wheelDiameter));
   }
 
+  public double getEncoderLeftBackMeters() {
+    return getEncoderInchesLeftBack() * 2.54 / 100;
+  }
+
+  public double getEncoderRightBackMeters() {
+    return getEncoderInchesRightBack() * 2.54 / 100;
+  }
+
   public void setRight(double num){
     m_right.set(num);
   }
@@ -107,6 +124,35 @@ public class DriveSubsystem extends SubsystemBase {
     if(Math.abs(gyro.getRate()) >= GYRO_DEAD_ZONE) {
       adjustedAngle += gyro.getRate() * DT;
     }
+    differentialDriveOdometry.update(gyro.getRotation2d(), getEncoderLeftBackMeters(), getEncoderRightBackMeters());
+  }
+
+  public Pose2d getPose() {
+    return differentialDriveOdometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getEncoderLeftBackMeters(), getEncoderRightBackMeters());
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    differentialDriveOdometry.resetPosition(pose, gyro.getRotation2d());
+  }
+
+  public void resetEncoders() {
+    motorLeftBack.setSelectedSensorPosition(0);
+    motorRightBack.setSelectedSensorPosition(0);
+  }
+
+  public double getAverageEncoderDistance() {
+    return (getEncoderLeftBackMeters() + getEncoderRightBackMeters()) / 2.0;
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    m_left.setVoltage(leftVolts);
+    m_right.setVoltage(-rightVolts);
+    differentialDrive.feed();
   }
 }
 

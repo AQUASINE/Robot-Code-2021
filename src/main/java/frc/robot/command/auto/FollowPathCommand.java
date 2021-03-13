@@ -21,7 +21,7 @@ public class FollowPathCommand extends CommandBase {
     private double currPositionL;
     private double prevPositionL;
 
-    private static final double kP = 0.001;
+    private static final double kP = 0.008;
 
     public static final double DT = 0.02;
 
@@ -64,8 +64,8 @@ public class FollowPathCommand extends CommandBase {
 
         double vel = pathState.getVelocity();
 
-        double vel_r = vel + Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
-        double vel_l = vel - Math.tan(angleError) * DriveSubsystem.BASE_WIDTH / 2;
+        double vel_r = vel + angleError/DT * DriveSubsystem.BASE_WIDTH / 2;
+        double vel_l = vel - angleError/DT * DriveSubsystem.BASE_WIDTH / 2;
 
         prevPositionR = currPositionR;
         currPositionR = drive.getEncoderInchesLeftBack();
@@ -75,8 +75,8 @@ public class FollowPathCommand extends CommandBase {
         double measuredVelocityL = (currPositionL-prevPositionL) / DT;
         double measuredVelocityR = (currPositionR-prevPositionR) / DT;
 
-        drive.differentialDrive.tankDrive(kP * (vel_l - measuredVelocityL), kP * (vel_r - measuredVelocityR));
-        System.out.println("FollowPathCommand.execute(): time=>" + currentTime + "; v_l:" + vel_l);
+        drive.differentialDrive.tankDrive(kP * (- vel_l + measuredVelocityL), kP * (- vel_r + measuredVelocityR));
+        System.out.println("FollowPathCommand.execute(): time=>" + currentTime + "; diff v_l:" + kP * (vel_l - measuredVelocityL));
         currentTime += DT;
     }
 

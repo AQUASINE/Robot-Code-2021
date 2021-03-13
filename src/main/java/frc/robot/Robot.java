@@ -8,18 +8,31 @@
 package frc.robot;
 
 import java.io.File;
+import java.util.List;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.command.IdleCommand;
 import frc.robot.command.auto.FollowPathCommand;
 import frc.robot.command.auto.autopaths.*;
@@ -97,13 +110,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
 
-    String filePath = new File("").getAbsolutePath();
-    filePath = filePath.concat("\\src\\test\\java\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
+    //String filePath = new File("").getAbsolutePath();
+    //filePath = filePath.concat("\\src\\test\\java\\frc\\robot\\path\\CircuitPathFixture.wpilib.json");
     
     //String filePath = "/usr/paths/CircuitPathFixture.wpilib.json";
-    PathDataModel pathDataModel = new PathDataModel(PathDataModel.readFromInputStream(filePath));
+    //PathDataModel pathDataModel = new PathDataModel(PathDataModel.readFromInputStream(filePath));
     
-    CommandScheduler.getInstance().schedule(new FollowPathCommand(drive, pathDataModel));
+    CommandScheduler.getInstance().schedule(getAutonomousCommand());
     CommandScheduler.getInstance().setDefaultCommand(drive, new IdleCommand(drive));
   }
 
@@ -137,4 +150,48 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {}
+
+  public Command getAutonomousCommand() {
+    var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltSecondsPerMeter, 
+        Constants.kaVoltSecondsSquaredPerMeter), 
+      Constants.kDriveKinematics, 
+      10
+    );
+
+    TrajectoryConfig config = new TrajectoryConfig(
+      Constants.kMaxSpeedMetersPerSecond, 
+      Constants.kMaxAccelerationMetersPerSecondSquared)
+      .setKinematics(Constants.kDriveKinematics)
+      .addConstraint(autoVoltageConstraint);
+
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0, new Rotation2d(0)), 
+      List.of(new Translation2d(1,1), new Translation2d(2, -1)), 
+      new Pose2d(3, 0, new Rotation2d(0)), 
+      config
+    );
+
+    RamseteCommand ramseteCommand = new RamseteCommand(
+      exampleTrajectory, 
+      drive::getPose, 
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltSecondsPerMeter, 
+        Constants.kaVoltSecondsSquaredPerMeter
+      ), 
+      Constants.kDriveKinematics, 
+      drive::getWheelSpeeds,
+      new PIDController(Constants.kPDriveVel, 0, 0), 
+      new PIDController(Constants.kPDriveVel, 0, 0), 
+      drive::tankDriveVolts, drive
+      );
+
+      drive.resetOdometry(exampleTrajectory.getInitialPose());
+
+      return ramseteCommand.andThen(() -> drive.tankDriveVolts(0, 0));
+  }
 }
