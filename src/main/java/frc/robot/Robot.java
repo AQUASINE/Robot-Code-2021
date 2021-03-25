@@ -22,12 +22,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.auto.FollowPathCommand;
 import frc.robot.command.auto.autopaths.*;
 import frc.robot.command.drive.TeleopDriveCommand;
+import frc.robot.command.intake.DeployIntake;
+import frc.robot.command.intake.RollerOffCommand;
+import frc.robot.command.intake.RollerOnCommand;
 import frc.robot.path.PathDataModel;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
 
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
+  private IntakeSubsystem intake;
   public PowerDistributionPanel pdp;
   //private double beginningPosition = 0;
 
@@ -42,13 +46,14 @@ public class Robot extends TimedRobot {
 
   public ADIS16448_IMU gyro;
 
-  public Joystick joystick;
+  public RobotStick joystick;
 
   public Robot() {
-    joystick = new Joystick(0);
+    joystick = new RobotStick(0);
     // TODO: refactor port numbers into variables
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
+    
     //DashHelper.getInstance().setUpPDPWidget(pdp);
     //DashHelper.getInstance().setUpGyroWidget(gyro);
     //DashHelper.getInstance().setEncoder(currentPosition);
@@ -71,6 +76,7 @@ public class Robot extends TimedRobot {
     gyro = new ADIS16448_IMU();
 
     drive = new DriveSubsystem(motorRightFront, motorLeftFront, motorRightBack, motorLeftBack, gyro);
+    intake = new IntakeSubsystem();
     drive.m_right.setInverted(true);
   } 
 
@@ -112,6 +118,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
     CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+    joystick.getButton(5).whenPressed(new RollerOnCommand(intake));
+    joystick.getButton(6).whenPressed(new RollerOffCommand(intake));
+    joystick.getButton(11).whenPressed(new DeployIntake(intake));
   }
 
 
