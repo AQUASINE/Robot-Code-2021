@@ -7,7 +7,7 @@ import frc.robot.subsystem.IntakeSubsystem;
 public class RollerOnCommand extends CommandBase {
     private IntakeSubsystem intake;
 
-    private final double ROLLER_SPEED = 1.0;
+    private final double ROLLER_SPEED = 0.2;
 
     public RollerOnCommand(IntakeSubsystem intake) {
         this.intake = intake;

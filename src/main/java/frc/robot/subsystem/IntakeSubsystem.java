@@ -25,11 +25,22 @@ public class IntakeSubsystem extends SubsystemBase {
         pushSolenoidR.set(on);
     }
 
-    public void setLockSolenoid(boolean on) {
+    public void openLockSolenoid(boolean on) {
         lockSolenoid.set(on);
     }
 
     public void setRollerMotor(double value) {
         rollerMotor.set(ControlMode.PercentOutput, value);
+    }
+
+    public void clearSolenoidStickyFaults() {
+        if(pushSolenoidL.isBlackListed() ||
+        pushSolenoidR.isBlackListed() ||
+        lockSolenoid.isBlackListed()
+        ) {
+            pushSolenoidL.clearAllPCMStickyFaults();
+            pushSolenoidR.clearAllPCMStickyFaults();
+            lockSolenoid.clearAllPCMStickyFaults();
+        }
     }
 }
