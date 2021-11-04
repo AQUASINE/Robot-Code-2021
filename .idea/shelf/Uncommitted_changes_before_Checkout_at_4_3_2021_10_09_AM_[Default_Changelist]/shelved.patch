@@ -1,0 +1,35 @@
+Index: src/main/java/frc/robot/command/auto/autopaths/SquarePathCommandGroup.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package frc.robot.command.auto.autopaths;\r\n\r\nimport edu.wpi.first.wpilibj2.command.SequentialCommandGroup;\r\nimport frc.robot.command.auto.DriveLengthConstantCommand;\r\nimport frc.robot.command.auto.RotateConstantCommand;\r\nimport frc.robot.subsystem.DriveSubsystem;\r\n\r\npublic class SquarePathCommandGroup extends SequentialCommandGroup {\r\n    public SquarePathCommandGroup(DriveSubsystem drive) {\r\n        addCommands(\r\n                /*new DriveLengthConstantCommand(48, drive),\r\n                new RotateConstantCommand(90, drive),\r\n                new DriveLengthConstantCommand(48, drive),\r\n                new RotateConstantCommand(90, drive),\r\n                new DriveLengthConstantCommand(48, drive),\r\n                new RotateConstantCommand(90, drive),\r\n                new DriveLengthConstantCommand(48, drive),\r\n                new RotateConstantCommand(90, drive)*/\r\n        );\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/frc/robot/command/auto/autopaths/SquarePathCommandGroup.java b/src/main/java/frc/robot/command/auto/autopaths/SquarePathCommandGroup.java
+--- a/src/main/java/frc/robot/command/auto/autopaths/SquarePathCommandGroup.java	
++++ b/src/main/java/frc/robot/command/auto/autopaths/SquarePathCommandGroup.java	
+@@ -1,22 +1,9 @@
+ package frc.robot.command.auto.autopaths;
+ 
+-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+-import frc.robot.command.auto.DriveLengthConstantCommand;
+-import frc.robot.command.auto.RotateConstantCommand;
+-import frc.robot.subsystem.DriveSubsystem;
++import frc.robot.subsystem.Drive;
+ 
+ public class SquarePathCommandGroup extends SequentialCommandGroup {
+-    public SquarePathCommandGroup(DriveSubsystem drive) {
+-        addCommands(
+-                /*new DriveLengthConstantCommand(48, drive),
+-                new RotateConstantCommand(90, drive),
+-                new DriveLengthConstantCommand(48, drive),
+-                new RotateConstantCommand(90, drive),
+-                new DriveLengthConstantCommand(48, drive),
+-                new RotateConstantCommand(90, drive),
+-                new DriveLengthConstantCommand(48, drive),
+-                new RotateConstantCommand(90, drive)*/
+-        );
++    public SquarePathCommandGroup(Drive drive) {
+ 
+     }
+ }

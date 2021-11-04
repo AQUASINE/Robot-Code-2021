@@ -28,6 +28,7 @@ import frc.robot.command.intake.RollerOnCommand;
 import frc.robot.path.PathDataModel;
 import frc.robot.subsystem.*;
 import frc.robot.DashHelper;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class Robot extends TimedRobot {
   private DriveSubsystem drive;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
   public ADIS16448_IMU gyro;
 
   public RobotStick joystick;
+  public XboxController xboxController;
 
   public Robot() {
     joystick = new RobotStick(0);
@@ -117,7 +119,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, joystick));
+    CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, xboxController));
     joystick.getButton(5).whenPressed(new RollerOnCommand(intake));
     joystick.getButton(6).whenPressed(new RollerOffCommand(intake));
     joystick.getButton(11).whenPressed(new DeployIntake(intake));
