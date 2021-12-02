@@ -1,4 +1,4 @@
-package frc.robot;
+/*package frc.robot;
 
 import org.w3c.dom.ranges.RangeException;
 
@@ -24,3 +24,4 @@ public class RobotStick extends Joystick {
         return buttons[button];
     }
 }
+*/

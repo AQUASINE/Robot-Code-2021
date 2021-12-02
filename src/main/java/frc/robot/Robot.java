@@ -47,11 +47,11 @@ public class Robot extends TimedRobot {
 
   public ADIS16448_IMU gyro;
 
-  public RobotStick joystick;
+  //public RobotStick joystick;
   public XboxController xboxController;
 
   public Robot() {
-    joystick = new RobotStick(0);
+    //joystick = new RobotStick(0);
     // TODO: refactor port numbers into variables
     pdp = new PowerDistributionPanel();
     pdp.clearStickyFaults();
@@ -120,9 +120,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
     CommandScheduler.getInstance().schedule(new TeleopDriveCommand(drive, xboxController));
-    joystick.getButton(5).whenPressed(new RollerOnCommand(intake));
-    joystick.getButton(6).whenPressed(new RollerOffCommand(intake));
-    joystick.getButton(11).whenPressed(new DeployIntake(intake));
+    //joystick.getButton(5).whenPressed(new RollerOnCommand(intake));
+    //joystick.getButton(6).whenPressed(new RollerOffCommand(intake));
+    //joystick.getButton(11).whenPressed(new DeployIntake(intake));
   }
 
 
