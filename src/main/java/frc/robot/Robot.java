@@ -48,9 +48,11 @@ public class Robot extends TimedRobot {
   public ADIS16448_IMU gyro;
 
   //public RobotStick joystick;
-  public XboxController xboxController;
+  //public XboxController xboxController;
+  XboxController xboxController = new XboxController(0);
 
   public Robot() {
+    
     //joystick = new RobotStick(0);
     // TODO: refactor port numbers into variables
     pdp = new PowerDistributionPanel();
